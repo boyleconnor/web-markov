@@ -1,2 +1,1 @@
-#This is the file that contains the code for the user interface of our program
-#Andrew In
+#tweetDatabase_tech: sample of tweets from Bill Gates, Satya Nadella, and others.
