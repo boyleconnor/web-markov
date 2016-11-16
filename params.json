@@ -1,5 +1,5 @@
 {
-  "name": "Twitterbot",
+  "name": "TwitterBot",
   "tagline": "",
   "body": "# TwitterBot - COMP 221 Algorithm Design/Analysis\r\n## Team Members: Ayoub Belemlih, Connor Boyle, Andrew Cui\r\n\r\n### Useful Resources\r\n\r\n* Codecademy Twitter API intro: [https://www.codecademy.com/en/tracks/twitter](https://www.codecademy.com/en/tracks/twitter). Good introduction using Ruby.\r\n\r\n* Tweepy: The python package we can use to retrieve tweets. The documentation has tips to install the package (using pip on your terminal) and basic code samples. [http://docs.tweepy.org/en/v3.5.0/](http://docs.tweepy.org/en/v3.5.0/)\r\n\r\n* Use Tweepy to retrieve tweets from a specific account - Quora answer: [https://www.quora.com/How-can-I-retrieve-from-given-users-home_timeline-with-Tweepy](https://www.quora.com/How-can-I-retrieve-from-given-users-home_timeline-with-Tweepy)\r\n\r\nLast Updated: 11/14/2016",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
