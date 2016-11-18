@@ -1,0 +1,2 @@
+#In this file, we generate a file with the words network data that we can then feed to Mathematica to produce a visualization of the network
+#Useful resource: https://reference.wolfram.com/language/tutorial/GraphDrawing.html
