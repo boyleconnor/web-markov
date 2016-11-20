@@ -44,8 +44,9 @@ chains = Graph()
 
 START_TOKEN = '<START>'
 END_TOKEN = '<END>'
+DATA_FILE = "Tweet Databases/tweetDatabase_Trump"
 
-with open("tweetDatabase_100mostFollowed") as f:
+with open(DATA_FILE) as f:
     text = ''
     count = 0
     for line in f:
