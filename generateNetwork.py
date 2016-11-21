@@ -23,7 +23,7 @@ for i in range(len(tokens)-1):
     network.add_node(tokens[i+1])
     network.add_edge(tokens[i], tokens[i+1])
 
-tweet_words = gen_text(network)
+tweet_words = gen_text(network) #tweet is a list of words
 print(tweet_words)
 tweet_network = []
 for x in tweet_words:
