@@ -25,13 +25,17 @@ for i in range(len(tokens)-1):
 
 
 def gen_text(graph, max_length=100):
+    '''
+    Return an array of tokens (words) that are statistically likely given the
+    Markov Chains stored in <graph>
+    '''
     node = START_TOKEN
-    text = ''
+    text = []
     count = 0
     while node != END_TOKEN and count < max_length:
         count += 1
         if node != START_TOKEN:
-            text += node+' '
+            text += [node]
         children = graph.get_neighbors(node)
         total_weight = 0
         die = []
@@ -39,7 +43,7 @@ def gen_text(graph, max_length=100):
             die += [child] * weight
             total_weight += weight
         node = die[randint(0, total_weight-1)]
-    return text+' '
+    return text
 
 
 while True:
@@ -54,7 +58,8 @@ while True:
         print(chains.get_nodes())
     elif command in {'text', 't'}:
         max_length = input('maximum length: ')
-        print(gen_text(chains))
+        text = gen_text(chains)
+        print(' '.join(text))
     elif command in {'quit', 'exit', 'q'}:
         break
     else:
