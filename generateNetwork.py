@@ -1,4 +1,5 @@
-from onechains import Graph
+from graph import Graph
+from onechains import gen_text
 import re
 from random import randint
 
@@ -22,18 +23,20 @@ for i in range(len(tokens)-1):
     network.add_node(tokens[i+1])
     network.add_edge(tokens[i], tokens[i+1])
 
-final_network = []
-for x in network.get_nodes():
+tweet_words = gen_text(network)
+print(tweet_words)
+tweet_network = []
+for x in tweet_words:
     neighbors = network.get_neighbors(x)
     for y in neighbors:
         node = x
         connected_neighbor = y
         weight_edge = neighbors[y]
         connection_str = '{"'+node+'"->"'+connected_neighbor+'",'+str(weight_edge)+'}'
-        final_network.append(connection_str)
+        tweet_network.append(connection_str)
 
-dbase = open("network_tweet_words",'w')
-for x in final_network:
+dbase = open("sample_tweet_words",'w')
+for x in tweet_network:
     dbase.write(x)
     dbase.write(',')
 
