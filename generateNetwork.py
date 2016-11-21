@@ -29,7 +29,7 @@ for x in network.get_nodes():
         node = x
         connected_neighbor = y
         weight_edge = neighbors[y]
-        connection_str = '{"'+node+'","'+connected_neighbor+'",'+str(weight_edge)+'}'
+        connection_str = '{"'+node+'"->"'+connected_neighbor+'",'+str(weight_edge)+'}'
         final_network.append(connection_str)
 
 dbase = open("network_tweet_words",'w')
