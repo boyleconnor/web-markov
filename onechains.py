@@ -32,7 +32,7 @@ def gen_text(graph, max_length=100):
     node = START_TOKEN
     text = []
     count = 0
-    while node != END_TOKEN and count < max_length:
+    while node != END_TOKEN and count <= max_length:
         count += 1
         if node != START_TOKEN:
             text += [node]
@@ -57,8 +57,8 @@ while True:
     elif command in {'nodes', 'n'}:
         print(chains.get_nodes())
     elif command in {'text', 't'}:
-        max_length = input('maximum length: ')
-        text = gen_text(chains)
+        max_length = int(input('maximum length: '))
+        text = gen_text(chains, max_length)
         print(' '.join(text))
     elif command in {'quit', 'exit', 'q'}:
         break
