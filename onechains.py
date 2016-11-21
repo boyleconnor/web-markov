@@ -45,22 +45,22 @@ def gen_text(graph, max_length=100):
         node = die[randint(0, total_weight-1)]
     return text
 
-
-while True:
-    command = input('Input a command: ')
-    if command in {'edges', 'e'}:
-        node = input('edges from node: ')
-        try:
-            print(chains.get_neighbors(node))
-        except KeyError:
-            print('Node %s not in chains' % node)
-    elif command in {'nodes', 'n'}:
-        print(chains.get_nodes())
-    elif command in {'text', 't'}:
-        max_length = int(input('maximum length: '))
-        text = gen_text(chains, max_length)
-        print(' '.join(text))
-    elif command in {'quit', 'exit', 'q'}:
-        break
-    else:
-        print('Command not recognized')
+if __name__ == '__main__':
+    while True:
+        command = input('Input a command: ')
+        if command in {'edges', 'e'}:
+            node = input('edges from node: ')
+            try:
+                print(chains.get_neighbors(node))
+            except KeyError:
+                print('Node %s not in chains' % node)
+        elif command in {'nodes', 'n'}:
+            print(chains.get_nodes())
+        elif command in {'text', 't'}:
+            max_length = int(input('maximum length: '))
+            text = gen_text(chains, max_length)
+            print(' '.join(text))
+        elif command in {'quit', 'exit', 'q'}:
+            break
+        else:
+            print('Command not recognized')
