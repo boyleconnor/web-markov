@@ -35,4 +35,5 @@ for x in network.get_nodes():
 dbase = open("network_tweet_words",'w')
 for x in final_network:
     dbase.write(x)
+    dbase.write(',')
 
