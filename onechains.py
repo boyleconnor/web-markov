@@ -3,28 +3,31 @@ from random import randint
 from graph import Graph
 
 
-chains = Graph()
 
 START_TOKEN = '<START>'
 END_TOKEN = '<END>'
-DATA_FILE = "Tweet Databases/tweetDatabase_Trump"
 
-with open(DATA_FILE) as f:
-    text = ''
-    count = 0
-    for line in f:
-        count += 1
-        tokens = re.findall('[^\]\[]+', line)
-        text += START_TOKEN+' '+tokens[1]+' '+END_TOKEN+'\n'
+def read_text(text_file_path):
+    with open(text_file_path) as text_file:
+        text = ''
+        count = 0
+        for line in text_file:
+            count += 1
+            tokens = re.findall('[^\]\[]+', line)
+            text += START_TOKEN+' '+tokens[1]+' '+END_TOKEN+'\n'
+    return text
 
-tokens = text.split()
-for i in range(len(tokens)-1):
-    chains.add_node(tokens[i])
-    chains.add_node(tokens[i+1])
-    chains.add_edge(tokens[i], tokens[i+1])
+def gen_graph(text):
+    chains = Graph()
+    tokens = text.split()
+    for i in range(len(tokens)-1):
+        chains.add_node(tokens[i])
+        chains.add_node(tokens[i+1])
+        chains.add_edge(tokens[i], tokens[i+1])
+    return chains
 
 
-def gen_text(graph, max_length=100):
+def gen_random_text(graph, max_length=100):
     '''
     Return an array of tokens (words) that are statistically likely given the
     Markov Chains stored in <graph>
@@ -46,6 +49,9 @@ def gen_text(graph, max_length=100):
     return text
 
 if __name__ == '__main__':
+    DATA_FILE = "Tweet Databases/tweetDatabase_Trump"
+    text = read_text(DATA_FILE)
+    chains = gen_graph(text)
     while True:
         command = input('Input a command: ')
         if command in {'edges', 'e'}:
@@ -58,7 +64,7 @@ if __name__ == '__main__':
             print(chains.get_nodes())
         elif command in {'text', 't'}:
             max_length = int(input('maximum length: '))
-            text = gen_text(chains, max_length)
+            text = gen_random_text(chains, max_length)
             print(' '.join(text))
         elif command in {'quit', 'exit', 'q'}:
             break
