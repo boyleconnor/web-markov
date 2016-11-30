@@ -7,7 +7,6 @@ from graph import Graph
 START_TOKEN = '<START>'
 END_TOKEN = '<END>'
 
-NGRAM_SIZE = 3
 
 def read_text(text_file_path):
     with open(text_file_path) as text_file:
@@ -72,13 +71,14 @@ def gen_random_text(graph, max_length=100):
 
 if __name__ == '__main__':
     DATA_FILE = "Tweet Databases/tweetDatabase_Trump"
+    ngram_size = int(input('Pick n-gram size: '))
     text = read_text(DATA_FILE)
-    chains = gen_graph(text, NGRAM_SIZE)
+    chains = gen_graph(text, ngram_size)
     while True:
         command = input('Input a command: ')
         if command in {'edges', 'e'}:
             node = tuple()
-            for x in range(NGRAM_SIZE):
+            for x in range(ngram_size):
                 token = input("token %s: " % (x+1))
                 if token == '':
                     break
