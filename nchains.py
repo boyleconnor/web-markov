@@ -1,5 +1,3 @@
-#TwitterBot
-#n=1
 import re
 import random
 from graph import Graph
