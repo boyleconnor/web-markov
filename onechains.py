@@ -9,7 +9,7 @@ chains = Graph()
 
 START_TOKEN = '<START>'
 END_TOKEN = '<END>'
-DATA_FILE = "Tweet Databases/tweetDatabase_Trump"
+DATA_FILE = "tweet_databases/tweetDatabase_Trump"
 
 with open(DATA_FILE) as f:
     text = ''

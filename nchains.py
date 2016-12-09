@@ -70,7 +70,7 @@ def gen_random_text(graph, max_length=100):
     return text
 
 if __name__ == '__main__':
-    DATA_FILE = "Tweet Databases/tweetDatabase_Trump"
+    DATA_FILE = "tweet_databases/tweetDatabase_Trump"
     ngram_size = int(input('Pick n-gram size: '))
     text = read_text(DATA_FILE)
     chains = gen_graph(text, ngram_size)
