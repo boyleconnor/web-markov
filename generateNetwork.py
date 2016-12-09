@@ -11,11 +11,11 @@ tweet_network = []
 for i in range(0,len(tweet_words)-1):
     neighbors = network.get_children((tweet_words[i],tweet_words[i+1]))
     for y in neighbors:
-        if (i <= len(tweet_words)-3 and y==(tweet_words[i+1],tweet_words[i+1])):
+        if (i <= len(tweet_words)-3 and y==(tweet_words[i+1],tweet_words[i+2])):
             node = tweet_words[i] + ' ' + tweet_words[i + 1]
             connected_neighbor = y[0] + ' ' + y[1]
             weight_edge = neighbors[y]
-            connection_str = '{"' + node + '"->"' + connected_neighbor + '",' + 'Blue'+ str(weight_edge) + '}'
+            connection_str = '{"' + node + '"->"' + connected_neighbor + '",' + 'Blue-'+ str(weight_edge) + '}'
             tweet_network.append(connection_str)
         else:
             node = tweet_words[i] + ' ' + tweet_words[i + 1]
