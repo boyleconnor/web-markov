@@ -3,7 +3,7 @@ import re
 from random import randint
 import nchains
 
-DATA_FILE = "tweet_databases/tweetDatabase_Trump"
+DATA_FILE = "tweet_databases/tweetDatabase_elonmusk"
 network = nchains.gen_graph(nchains.read_text(DATA_FILE),2)
 tweet_words = nchains.gen_random_text(network,50) #tweet is a list of words
 print(tweet_words)
