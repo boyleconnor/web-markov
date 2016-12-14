@@ -1,15 +1,14 @@
-
 import nchains
 
-DATA_FILE = "tweet_databases/tweetDatabase_Trump"
-network = nchains.gen_graph(nchains.read_text(DATA_FILE), 2)
+DATA_FILE = "tweet_databases/tweetDatabase_Trump" #Choose a tweet file from tweet_databases to generate tweets that resemble those of a specific user
+network = nchains.gen_graph(nchains.read_text(DATA_FILE), 2) #In this case 2-chaining is used
 tweet_nodes = nchains.gen_random_path(network)
 print(tweet_nodes)
 tweet_network = []
 for i in range(0,len(tweet_nodes)-1):
     neighbors = network.get_children(tweet_nodes[i])
     for y in neighbors:
-        if (i <= len(tweet_nodes)-3 and y==tweet_nodes[i+1]):
+        if (i <= len(tweet_nodes)-3 and y==tweet_nodes[i+1]): #Adds the Blue label to designate the tweet path on Mathematica
             node_tuple = tweet_nodes[i]
             node = ' '.join(node_tuple)
             connected_neighbor = ' '.join(y)
