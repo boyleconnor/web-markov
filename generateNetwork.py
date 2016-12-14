@@ -26,7 +26,8 @@ for i in range(1,len(tweet_nodes)-1):
 
 dbase = open("NetworkBuilder/tweet_path_mathematica",'w')
 dbase.write("GraphPlot[{")
+Mathematica_Formula = ""
 for x in tweet_network:
-    dbase.write(x)
-    dbase.write(',')
-dbase.write("VertexLabeling -> True]")
+    Mathematica_Formula = Mathematica_Formula + x + ','
+dbase.write(Mathematica_Formula[:-1])
+dbase.write("},VertexLabeling -> True]")
