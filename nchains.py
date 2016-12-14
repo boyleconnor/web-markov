@@ -56,10 +56,9 @@ def gen_random_path(graph, max_length=100):
     count = 0
     while node != END_TOKEN and count <= max_length:
         count += 1
+        path += [node]
         if END_TOKEN in node:
             break
-        elif node != (START_TOKEN,):
-            path += [node]
         children = graph.get_children(node)
         total_weight = 0
         die = []
@@ -80,7 +79,7 @@ def gen_random_text(graph, max_length):
     while True:
         count += 1
         path = gen_random_path(graph, max_length)
-        words = [node[-1] for node in path[1:]]
+        words = [node[-1] for node in path[1:-1]]
         text = ' '.join(words)
         if (len(text) <= max_length and len(text) > 0) or max_length <= 0:
             return text
