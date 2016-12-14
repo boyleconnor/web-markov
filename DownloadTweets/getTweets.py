@@ -25,7 +25,7 @@ while(user_input != "exit"):
     input_users = user_input.split(',')
     total_tweets = 0
     for user in input_users:
-        file_name = "tweet_databases/tweetDatabase_" + user
+        file_name = "../tweet_databases/tweetDatabase_" + user
         dbase = open(file_name, 'w') #Open the user's tweet file or create new one if it does not exist
         deleteContent(dbase) #Delete the contents of the file
         i = 0
