@@ -28,5 +28,5 @@ dbase.write("GraphPlot[{")
 Mathematica_Formula = ""
 for x in tweet_network:
     Mathematica_Formula = Mathematica_Formula + x + ','
-dbase.write(Mathematica_Formula[:-1])
+dbase.write(Mathematica_Formula[:-1]) #remove the comma at the end of the formula
 dbase.write("},VertexLabeling -> True]")
