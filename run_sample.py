@@ -1,9 +1,14 @@
 import nchains
+import os
 
-print("Choice of users: ")
-print("@BarackObama; @justinbieber; @katyperry; @ladygaga; @rihana;")
-print("@taylorswift13; @YouTube; BillGates; CalvinHarris; elonmusk;")
-print("Palin; richardbranson; satyanadella; sundarpichai; timoreilly; Trump")
+#Sources:
+#Iterate through files in a directory: http://stackoverflow.com/questions/10377998/how-can-i-iterate-over-files-in-a-given-directory
+
+lst_file_names = ""
+for file_name in os.listdir("tweet_databases"):
+    lst_file_names = lst_file_names+file_name[14:]+','
+
+print("Choice of users: " + lst_file_names[:-1])
 
 user = str(input('Pick a twitter user for the bot to mimic: '))
 DATA_FILE = "tweet_databases/tweetDatabase_" + user
