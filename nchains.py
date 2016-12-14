@@ -91,17 +91,19 @@ def gen_random_text(graph, max_length):
 
 if __name__ == '__main__':
     DATA_FILE = "tweet_databases/tweetDatabase_Trump"
+
     while True:
         try:
             ngram_size = int(input('Pick n-gram size: '))
             break
         except ValueError:
             print('Please pick an integer n-gram size')
+
     text = read_text(DATA_FILE)
     chains = gen_graph(text, ngram_size)
+
     while True:
         command = input('Input a command: ')
-
         if command in {'edges', 'e'}:
             node = tuple()
             for x in range(ngram_size):
@@ -109,6 +111,7 @@ if __name__ == '__main__':
                 if token == '':
                     break
                 node += (token,)
+
             try:
                 children = chains.get_children(node)
                 print((node, children))
@@ -122,7 +125,7 @@ if __name__ == '__main__':
             DEFAULT_MAX_LENGTH = 140
             while True:
                 try:
-                    max_length = input('maximum length (140): ')
+                    max_length = input('maximum length (default 140): ')
                     if max_length == '':
                         max_length = 140
                     else:
@@ -135,6 +138,5 @@ if __name__ == '__main__':
 
         elif command in {'quit', 'exit', 'q'}:
             break
-
         else:
             print('Command not recognized')
