@@ -26,18 +26,21 @@ while True:
             if token == '':
                 break
             node += (token,)
+
         try:
             children = chains.get_children(node)
             print((node, children))
         except KeyError:
             print('Node %s not in chains' % str(node))
+
     elif command in {'nodes', 'n'}:
         print(chains.get_nodes())
+
     elif command in {'text', 't'}:
         DEFAULT_MAX_LENGTH = 140
         while True:
             try:
-                max_length = input('maximum length (140): ')
+                max_length = input('maximum length (default 140): ')
                 if max_length == '':
                     max_length = 140
                 else:
@@ -47,6 +50,7 @@ while True:
                 print('Please input an integer length or nothing')
         text = nchains.gen_random_text(chains, max_length)
         print(text)
+
     elif command in {'quit', 'exit', 'q'}:
         break
     else:
