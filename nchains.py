@@ -46,20 +46,20 @@ def gen_graph(text, n):
     return chains
 
 
-def gen_random_text(graph, max_length=100):
+def gen_random_path(graph, max_length=100):
     '''
-    Return an array of tokens (words) that are statistically likely given the
-    Markov Chains stored in <graph>
+    Return an array of nodes that are statistically likely given the Markov
+    Chains stored in <graph>
     '''
     node = (START_TOKEN,)
-    text = []
+    path = []
     count = 0
     while node != END_TOKEN and count <= max_length:
         count += 1
         if END_TOKEN in node:
             break
         elif node != (START_TOKEN,):
-            text += [node[-1]]
+            path += [node]
         children = graph.get_children(node)
         total_weight = 0
         die = []
@@ -67,15 +67,41 @@ def gen_random_text(graph, max_length=100):
             die += [child] * weight
             total_weight += weight
         node = random.choice(die)
-    return text
+    return path
+
+
+def gen_random_text(graph, max_length):
+    '''
+    Return a string of at most length <max_length> that is statistically likely
+    given the Markov Chains stored in <graph>
+    '''
+    MAX_COUNTS = 1000 # Maximum number of attempts at a path before giving up
+    count = 0
+    while True:
+        count += 1
+        path = gen_random_path(graph, max_length)
+        words = [node[-1] for node in path[1:]]
+        text = ' '.join(words)
+        if (len(text) <= max_length and len(text) > 0) or max_length <= 0:
+            return text
+        if count == MAX_COUNTS:
+            print('%s PATHS ATTEMPTED, NONE FIT LENGTH RESTRICTION OF %s' % (count, max_length))
+            return ''
+
 
 if __name__ == '__main__':
     DATA_FILE = "tweet_databases/tweetDatabase_Trump"
-    ngram_size = int(input('Pick n-gram size: '))
+    while True:
+        try:
+            ngram_size = int(input('Pick n-gram size: '))
+            break
+        except ValueError:
+            print('Please pick an integer n-gram size')
     text = read_text(DATA_FILE)
     chains = gen_graph(text, ngram_size)
     while True:
         command = input('Input a command: ')
+
         if command in {'edges', 'e'}:
             node = tuple()
             for x in range(ngram_size):
@@ -88,13 +114,27 @@ if __name__ == '__main__':
                 print((node, children))
             except KeyError:
                 print('Node %s not in chains' % str(node))
+
         elif command in {'nodes', 'n'}:
             print(chains.get_nodes())
+
         elif command in {'text', 't'}:
-            max_length = int(input('maximum length: '))
+            DEFAULT_MAX_LENGTH = 140
+            while True:
+                try:
+                    max_length = input('maximum length (140): ')
+                    if max_length == '':
+                        max_length = 140
+                    else:
+                        max_length = int(max_length)
+                    break
+                except ValueError:
+                    print('Please input an integer length or nothing')
             text = gen_random_text(chains, max_length)
-            print(' '.join(text))
+            print(text)
+
         elif command in {'quit', 'exit', 'q'}:
             break
+
         else:
             print('Command not recognized')
