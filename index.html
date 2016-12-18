@@ -25,23 +25,6 @@
 <h2>
 <a id="team-members-ayoub-belemlih-connor-boyle-andrew-cui" class="anchor" href="#team-members-ayoub-belemlih-connor-boyle-andrew-cui" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Team Members: Ayoub Belemlih, Connor Boyle, Andrew Cui</h2>
 
-<h3>
-<a id="useful-resources" class="anchor" href="#useful-resources" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Useful Resources</h3>
-
-<ul>
-<li><p>Codecademy Twitter API intro: <a href="https://www.codecademy.com/en/tracks/twitter">https://www.codecademy.com/en/tracks/twitter</a>. Good introduction using Ruby.</p></li>
-<li><p>Tweepy: The python package we can use to retrieve tweets. The documentation has tips to install the package (using pip on your terminal) and basic code samples. <a href="http://docs.tweepy.org/en/v3.5.0/">http://docs.tweepy.org/en/v3.5.0/</a></p></li>
-<li><p>Use Tweepy to retrieve tweets from a specific account - Quora answer: <a href="https://www.quora.com/How-can-I-retrieve-from-given-users-home_timeline-with-Tweepy">https://www.quora.com/How-can-I-retrieve-from-given-users-home_timeline-with-Tweepy</a></p></li>
-</ul>
-
-<h3>
-<a id="approach" class="anchor" href="#approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Approach</h3>
-
-<ul>
-<li><p>We enter tweets into a Markov Chain, a weighted graph where each node represents a gram, each edge represents immediate succession between grams, and weight of the edge represents probability of that succession. </p></li>
-<li><p>User can choose gram size, i.e. how many words are in a "cluster". Monogram or 2-gram generally yields to better results. </p></li>
-<li><p>We generate tweets based on Markov Chain by randomly choosing nodes and edges. Since edges are weighted, those with higher weights are more likely to be chosen. </p></li>
-</ul>
 
 <p>Last Updated: 12/13/2016</p>
 
