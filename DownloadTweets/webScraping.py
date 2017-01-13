@@ -10,8 +10,7 @@ def find_twitter_usernames():
     page = requests.get('http://twittercounter.com/pages/100?utm_expid=102679131-111.l9w6V73qSUykZciySuTZuA.0&utm_referrer=https%3A%2F%2Fwww.google.com%2F')
     pageCode = html.fromstring(page.content)
 
-    # <span itemprop="alternateName">@selenagomez</span></a>
-    # prices = tree.xpath('//span[@class="item-price"]/text()')
+    
 
     twitter_users = pageCode.xpath('//span[@itemprop="alternateName"]/text()')
     twitter_users_string = ""
