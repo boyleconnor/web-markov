@@ -1,11 +1,17 @@
 import re
 import random
+import sys
 from graph import Graph
 
 
 
 START_TOKEN = '<START>'
 END_TOKEN = '<END>'
+
+
+if sys.version_info[0] != 3:
+    print("This program requires Python 3. You are currently using:\n%s" % (sys.version,))
+    exit()
 
 
 def read_text(text_file_path):
