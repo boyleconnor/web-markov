@@ -11,7 +11,7 @@ for file_name in os.listdir("tweet_databases"):
 print("Choice of users: " + lst_file_names[:-1])
 
 user = str(input('Pick a twitter user for the bot to mimic: '))
-DATA_FILE = "tweet_databases/tweetDatabase_" + user
+DATA_FILE = "tweet_databases/" + user
 ngram_size = int(input('Pick n-gram size (preferably from 1 to 3): '))
 
 print("Input 'e' if you want to see the edges.")
