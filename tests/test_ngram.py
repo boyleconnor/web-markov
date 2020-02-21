@@ -26,7 +26,7 @@ class NGramTest(TestCase):
         ngram.add_ngram('hello', 'mister', 'Smith')
         ngram.add_ngram('hello', 'mister', 'Boyle')
 
-        hello_mister = ngram.get_ngrams('hello', 'there')
+        hello_mister = ngram.get_ngrams('hello', 'mister')
         hello_mister_boyle = ('hello', 'mister', 'Boyle')
         self.assertIn(hello_mister_boyle, hello_mister)
         self.assertAlmostEqual(hello_mister[hello_mister_boyle], 1 / 2)
