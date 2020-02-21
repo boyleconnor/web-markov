@@ -12,7 +12,6 @@ class NGramTest(TestCase):
         ngram.add_ngram('hello', 'there', 'sir')
         ngram.add_ngram('hello', 'there', 'man')
         ngram.add_ngram('hello', 'mister', 'man')
-        self.assertIn('sir', ngram.get_ngrams('hello', 'world'))
 
     def test_add_wrong_length_ngram(self):
         ngram = NGram(3)
