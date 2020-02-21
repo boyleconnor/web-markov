@@ -1,3 +1,6 @@
+import random
+
+
 class NGram:
     '''Graph-based N-Gram Markov Model
     '''
@@ -49,3 +52,11 @@ class NGram:
         for suffix, weight in self.graph[prefix].items():
             mapping[prefix + (suffix,)] = weight / total_weight
         return mapping
+
+    def random_ngram(self, *prefix):
+        threshhold = random.random()
+        upto = 0.0
+        for ngram, probability in self.get_ngrams(*prefix).items():
+            upto += probability
+            if upto >= threshhold:
+                return ngram
