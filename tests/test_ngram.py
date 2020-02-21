@@ -26,12 +26,12 @@ class NGramTest(TestCase):
         ngram.add_ngram('hello', 'mister', 'Smith')
         ngram.add_ngram('hello', 'mister', 'Boyle')
 
-        hello_mister = self.get_ngrams('hello', 'there')
+        hello_mister = ngram.get_ngrams('hello', 'there')
         hello_mister_boyle = ('hello', 'mister', 'Boyle')
-        self.assertIn(hello_mister_boyle, hellow_mister)
+        self.assertIn(hello_mister_boyle, hello_mister)
         self.assertAlmostEqual(hello_mister[hello_mister_boyle], 1 / 2)
 
-        hello_there = self.get_ngrams('hello', 'there')
+        hello_there = ngram.get_ngrams('hello', 'there')
         hello_there_sir = ('hello', 'there', 'sir')
         self.assertIn(hello_there_sir, hello_there)
         self.assertAlmostEqual(hello_there[hello_there_sir], 2 / 3)
