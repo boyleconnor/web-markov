@@ -36,3 +36,28 @@ class NGramTest(TestCase):
         self.assertIn(hello_there_sir, hello_there)
         self.assertAlmostEqual(hello_there[hello_there_sir], 2 / 3)
         self.assertNotIn(hello_mister_boyle, hello_there)
+
+    def test_random_ngram(self):
+        ITERATIONS = 10000
+
+        ngram = NGram(3)
+        for i in range(9):
+            ngram.add_ngram('hello', 'there', 'world')
+        ngram.add_ngram('hello', 'there', 'sir')
+
+        world_count = 0
+        sir_count = 0
+        for i in range(ITERATIONS):
+            random_ngram = ngram.random_ngram('hello', 'there')
+            if random_ngram == ('hello', 'there', 'world'):
+                world_count += 1
+            if random_ngram == ('hello', 'there', 'sir'):
+                sir_count += 1
+
+        world_share = world_count / ITERATIONS
+        sir_share = sir_count / ITERATIONS
+
+        self.assertGreater(world_share, 0.85)
+        self.assertLess(world_share, 0.95)
+        self.assertGreater(sir_share, 0.05)
+        self.assertLess(sir_share, 0.15)
