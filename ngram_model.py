@@ -1,37 +1,35 @@
-class Graph:
+class NGram:
+    '''Graph-based N-Gram Markov Model
     '''
-    Directional, weighted graph whose nodes are strings or tuples of strings,
-    and whose edge weights are integers.
-    '''
-    def __init__(self):
-        self.nodes = set()
-        self.edges = {}
+    def __init__(self, n):
+        self.n = n
+        self.graph = {}
 
-    def add_edge(self, node_one, node_two):
-        '''
-        Increments the possibility of a path from node_one to node_two
-        '''
-        self.nodes.add(node_one)
-        self.nodes.add(node_two)
+    def add_ngram(self, *ngram):
+        '''Add instance of ngram to model
+        e.g.
 
-        if node_one in self.edges:
-            if node_two in self.edges[node_one]:
-                # Increment adjacency from node_one to node_two
-                self.edges[node_one][node_two] += 1
-            else:
-                # Create new adjacency from node_one to node_two
-                self.edges[node_one][node_two] = 1
+        ngram.add_ngram('hello', 'there', 'world!')
+
+        would increase the probability of "world!" appearing after "hello" and
+        "there" (where ngram is an instance of NGram such that n = 3)
+        '''
+        if len(ngram) != self.n:
+            raise ValueError("NGram input must be of length: %d" % (self.n,))
+
+        source = ngram[:-1]
+        destination = ngram[-1]
+
+        # Cases:
+
+        # Source has never been recorded
+        if source not in self.graph:
+            self.graph[source] = {destination: 1}
+
+        # Source has been recorded, but not preceding destination
+        elif desination not in self.graph[source]:
+            self.graph[source][destination] = 1
+
+        # Source has been recorded, leading to destination
         else:
-            # Create new adjacency table for node_one,
-            # populate with new adjacency to node_two
-            self.edges[node_one] = {node_two: 1}
-
-    def get_nodes(self):
-        return self.nodes
-
-    def get_children(self, node):
-        '''
-        Return a dict of all of the children of <node> mapped to the weight of
-        the edge leading to them.
-        '''
-        return self.edges[node]
+            self.graph[source][destination] += 1
