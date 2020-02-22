@@ -74,3 +74,8 @@ class NGramTest(TestCase):
         ngram.read_text('hello, world')
         self.assertIn(('', 'hello', ' '), ngram.get_ngrams('', 'hello'))
         self.assertAlmostEqual(ngram.get_ngrams('', 'hello')[('', 'hello', ', ')], 1 / 3)
+
+    def test_read_blank_text(self):
+        new_ngram = NGram(4)
+        new_ngram.read_text('')
+        self.assertIn(('', '', '', ''), new_ngram.get_ngrams('', '', ''))
