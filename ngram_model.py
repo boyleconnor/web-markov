@@ -38,9 +38,11 @@ class NGram:
         else:
             self.graph[source][destination] += 1
 
-    def get_ngrams(self, *prefix):
-        '''Return map of ngrams to probabilites (between 0.0 and 1.0) for the
-        given prefix (the first n-1 tokens of an ngram).
+    def get_suffixes(self, *prefix):
+        '''Return mapping of suffixes to probabilities for a given prefix.
+
+        "prefix" is the first n-1 elements of the ngram, "suffix" is the last
+        element of the ngram.
         '''
         if len(prefix) != self.n - 1:
             raise ValueError("prefix must be of length: %d" % (self.n-1,))
@@ -51,8 +53,18 @@ class NGram:
         mapping = {}
         total_weight = sum(self.graph[prefix].values())
         for suffix, weight in self.graph[prefix].items():
-            mapping[prefix + (suffix,)] = weight / total_weight
+            mapping[suffix] = weight / total_weight
         return mapping
+
+    def get_ngrams(self, *prefix):
+        '''Return map of ngrams to probabilites (between 0.0 and 1.0) for the
+        given prefix (the first n-1 tokens of an ngram).
+        '''
+        suffix_mapping = self.get_suffixes(*prefix)
+        ngram_mapping = {}
+        for suffix, probability in suffix_mapping.items():
+            ngram_mapping[prefix+(suffix,)] = probability
+        return ngram_mapping
 
     def random_ngram(self, *prefix):
         threshhold = random.random()
