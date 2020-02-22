@@ -37,6 +37,16 @@ class NGramTest(TestCase):
         self.assertAlmostEqual(hello_there[hello_there_sir], 2 / 3)
         self.assertNotIn(hello_mister_boyle, hello_there)
 
+    def test_get_suffixes(self):
+        ngram = NGram(2)
+        ngram.add_ngram('hello', 'world')
+        ngram.add_ngram('hello', 'world')
+        ngram.add_ngram('hello', 'Connor')
+
+        self.assertIn('Connor', ngram.get_suffixes('hello'))
+        self.assertIn('world', ngram.get_suffixes('hello'))
+        self.assertAlmostEqual(ngram.get_suffixes('hello')['Connor'], 1 / 3)
+
     def test_random_ngram(self):
         ITERATIONS = 10000
 
