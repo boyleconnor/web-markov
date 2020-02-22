@@ -61,3 +61,17 @@ class NGramTest(TestCase):
         self.assertLess(world_share, 0.95)
         self.assertGreater(sir_share, 0.05)
         self.assertLess(sir_share, 0.15)
+
+    def test_read_text(self):
+        ngram = NGram(3)
+        ngram.read_text('hello world')
+        self.assertIn(('', '', 'hello'), ngram.get_ngrams('', ''))
+        self.assertIn(('', 'hello', ' '), ngram.get_ngrams('', 'hello'))
+        self.assertAlmostEqual(ngram.get_ngrams('hello', ' ' )[('hello', ' ', 'world')], 1)
+        self.assertIn((' ', 'world', ''), ngram.get_ngrams(' ', 'world'))
+        self.assertIn(('world', '', ''), ngram.get_ngrams('world', ''))
+
+        ngram.read_text('hello world')
+        ngram.read_text('hello, world')
+        self.assertIn(('', 'hello', ' '), ngram.get_ngrams('', 'hello'))
+        self.assertAlmostEqual(ngram.get_ngrams('', 'hello')[('', 'hello', ', ')], 1 / 3)
