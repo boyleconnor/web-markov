@@ -73,3 +73,25 @@ class ProbabilisticTests(TestCase):  # TODO: Test Markov.random_suffix method
         self.assertLess(world_share, 0.95)
         self.assertGreater(sir_share, 0.05)
         self.assertLess(sir_share, 0.15)
+
+    def test_random_suffix(self):
+        ITERATIONS = 20000
+
+        markov = Markov(2)
+        markov.add_ngram('hello', 'world')
+        for i in range(20):
+            markov.add_ngram('goodbye', 'world')
+        for i in range(5):
+            markov.add_ngram('goodbye', 'Jessica')
+
+        world_count = 0
+        jessica_count = 0
+        for i in range(ITERATIONS):
+            random_suffix = markov.random_suffix('goodbye')
+            if random_suffix == 'world':
+                world_count += 1
+            if random_suffix == 'Jessica':
+                jessica_count += 1
+
+        self.assertAlmostEqual(world_count / ITERATIONS, 4 / 5, 2)
+        self.assertAlmostEqual(jessica_count / ITERATIONS, 1 / 5, 2)
