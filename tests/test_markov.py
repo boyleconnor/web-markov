@@ -1,0 +1,75 @@
+from unittest import TestCase
+from markov import Markov
+
+
+class DeterministicTests(TestCase):
+    def test_initialize(self):
+        markov = Markov(3)
+
+    def test_add_ngram(self):
+        markov = Markov(3)
+        markov.add_ngram('hello', 'there', 'sir')
+        markov.add_ngram('hello', 'there', 'sir')
+        markov.add_ngram('hello', 'there', 'man')
+        markov.add_ngram('hello', 'mister', 'man')
+
+    def test_add_wrong_length_ngram(self):
+        markov = Markov(3)
+        with self.assertRaises(ValueError) as context:
+            markov.add_ngram('hello', 'world')
+
+    def test_get_ngrams(self):
+        markov = Markov(3)
+        markov.add_ngram('hello', 'there', 'sir')
+        markov.add_ngram('hello', 'there', 'sir')
+        markov.add_ngram('hello', 'there', 'world')
+        markov.add_ngram('hello', 'mister', 'Smith')
+        markov.add_ngram('hello', 'mister', 'Boyle')
+
+        hello_mister = markov.get_ngrams('hello', 'mister')
+        hello_mister_boyle = ('hello', 'mister', 'Boyle')
+        self.assertIn(hello_mister_boyle, hello_mister)
+        self.assertAlmostEqual(hello_mister[hello_mister_boyle], 1 / 2)
+
+        hello_there = markov.get_ngrams('hello', 'there')
+        hello_there_sir = ('hello', 'there', 'sir')
+        self.assertIn(hello_there_sir, hello_there)
+        self.assertAlmostEqual(hello_there[hello_there_sir], 2 / 3)
+        self.assertNotIn(hello_mister_boyle, hello_there)
+
+    def test_get_suffixes(self):
+        markov = Markov(2)
+        markov.add_ngram('hello', 'world')
+        markov.add_ngram('hello', 'world')
+        markov.add_ngram('hello', 'Connor')
+
+        self.assertIn('Connor', markov.get_suffixes('hello'))
+        self.assertIn('world', markov.get_suffixes('hello'))
+        self.assertAlmostEqual(markov.get_suffixes('hello')['Connor'], 1 / 3)
+
+
+class ProbabilisticTests(TestCase):  # TODO: Test Markov.random_suffix method
+    def test_random_ngram(self):
+        ITERATIONS = 10000
+
+        markov = Markov(3)
+        for i in range(9):
+            markov.add_ngram('hello', 'there', 'world')
+        markov.add_ngram('hello', 'there', 'sir')
+
+        world_count = 0
+        sir_count = 0
+        for i in range(ITERATIONS):
+            random_ngram = markov.random_ngram('hello', 'there')
+            if random_ngram == ('hello', 'there', 'world'):
+                world_count += 1
+            if random_ngram == ('hello', 'there', 'sir'):
+                sir_count += 1
+
+        world_share = world_count / ITERATIONS
+        sir_share = sir_count / ITERATIONS
+
+        self.assertGreater(world_share, 0.85)
+        self.assertLess(world_share, 0.95)
+        self.assertGreater(sir_share, 0.05)
+        self.assertLess(sir_share, 0.15)
