@@ -66,10 +66,14 @@ class Markov:
             ngram_mapping[prefix+(suffix,)] = probability
         return ngram_mapping
 
-    def random_ngram(self, *prefix):
+    def random_suffix(self, *prefix):
         threshhold = random.random()
         upto = 0.0
-        for ngram, probability in self.get_ngrams(*prefix).items():
+        for suffix, probability in self.get_suffixes(*prefix).items():
             upto += probability
             if upto >= threshhold:
-                return ngram
+                return suffix
+
+    def random_ngram(self, *prefix):
+        suffix = self.random_suffix(*prefix)
+        return prefix + (suffix,)
