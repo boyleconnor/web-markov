@@ -36,3 +36,22 @@ class TextMarkov(Markov):
         for i in range(len(tokens) - prefix_length):
             ngram = tokens[i:i+self.n]
             self.add_ngram(*ngram)
+
+    def random_text(self, *prefix):
+        '''Probabilistically generate a text. Walk through the model starting
+        at recorded beginnings of texts (i.e. the prefix [''] * n-1) and ending
+        at the recorded endings of texts (i.e. the suffix '').
+        '''
+        text = ''
+
+        if len(prefix) == 0:
+            prefix = ('',) * (self.n - 1)
+        elif len(prefix) != self.n - 1:
+            raise KeyError("Bad prefix length: %d" % (len(prefix),))
+
+        while True:
+            suffix = self.random_suffix(*prefix)
+            if suffix == '':
+                return text
+            text += suffix
+            prefix = prefix[1:] + (suffix,)  # FIXME: This might be inefficient for very large values of n
