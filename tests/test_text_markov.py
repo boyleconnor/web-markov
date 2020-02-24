@@ -20,3 +20,15 @@ class TextMarkovTest(TestCase):
         markov.read_text('hello, world')
         self.assertIn(('', 'hello', ' '), markov.get_ngrams('', 'hello'))
         self.assertAlmostEqual(markov.get_ngrams('', 'hello')[('', 'hello', ', ')], 1 / 3)
+
+    def test_random_text(self):
+        ITERATIONS = 1000
+
+        markov = TextMarkov(3)
+        markov.read_text('hello world')
+        self.assertEqual(markov.random_text(), 'hello world')
+
+        markov.read_text('hello friend')
+        random_texts = [markov.random_text() for i in range(ITERATIONS)]
+        self.assertIn('hello friend', random_texts)
+        self.assertIn('hello world', random_texts)
