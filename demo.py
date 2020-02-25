@@ -44,5 +44,10 @@ if __name__ == '__main__':
         elif command in {'quit', 'exit', 'q'}:
             break
 
+        elif command in {'help', 'h', '?'}:
+            print('"t" or "tweet" to probabilistically generate a tweet')
+            print('"h" or "help" to see this help screen')
+            print('"q" or "quit" to quit')
+
         else:
             print('Command not recognized')
