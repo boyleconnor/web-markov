@@ -48,6 +48,13 @@ class Markov:
         "prefix" is the first n-1 elements of the ngram, "suffix" is the last
         element of the ngram.
         '''
+        # FIXME: This requires adding up all the occurrences of all suffixes for
+        #        the given prefix in order to get the total. That means the time
+        #        to get the probability of any particular suffix (i.e. ngram) is
+        #        linear to the number of unique suffixes of that prefix. This
+        #        model should store the total occurrences of a prefix to get
+        #        around this, and make the time per suffix lookup constant.
+
         if len(prefix) != self.n - 1:
             raise ValueError("prefix must be of length: %d" % (self.n-1,))
 
