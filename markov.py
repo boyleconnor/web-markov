@@ -81,6 +81,9 @@ class Markov:
         '''Add all of the ngram occurrences represented in markov_model to
         self.
         '''
+        if self.n != markov_model.n:
+            raise ValueError("N-gram lengths %d and %d do not match!" % (self.n, markov_model.n))
+
         for prefix, suffixes in markov_model.graph.items():
             if prefix not in self.graph:
                 self.graph[prefix] = suffixes.copy()
