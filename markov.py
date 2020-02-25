@@ -77,6 +77,20 @@ class Markov:
             ngram_mapping[prefix+(suffix,)] = probability
         return ngram_mapping
 
+    def update(self, markov_model):
+        '''Add all of the ngram occurrences represented in markov_model to
+        self.
+        '''
+        for prefix, suffixes in markov_model.graph.items():
+            if prefix not in self.graph:
+                self.graph[prefix] = suffixes.copy()
+            else:
+                for suffix in suffixes:
+                    if suffix not in self.graph[prefix]:
+                        self.graph[prefix][suffix] = markov_model.graph[prefix][suffix]
+                    else:
+                        self.graph[prefix][suffix] += markov_model.graph[prefix][suffix]
+
     def random_suffix(self, *prefix):
         threshhold = random.random()
         upto = 0.0
