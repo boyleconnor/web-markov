@@ -47,6 +47,36 @@ class DeterministicTests(TestCase):
         self.assertIn('world', markov.get_suffixes('hello'))
         self.assertAlmostEqual(markov.get_suffixes('hello')['Connor'], 1 / 3)
 
+    def test_update(self):
+        model_one = Markov(2)
+        model_one.add_ngram('goodbye', 'friend')
+        model_one.add_ngram('hello', 'world')
+
+        model_two = Markov(2)
+        model_two.add_ngram('hello', 'world')
+        model_two.add_ngram('hello', 'Connor')
+
+        model_two.update(model_one)
+
+        self.assertAlmostEqual(model_two.get_suffixes('hello')['Connor'], 1 / 3)
+        self.assertAlmostEqual(model_two.get_suffixes('hello')['world'], 2 / 3)
+        self.assertAlmostEqual(model_two.get_suffixes('goodbye')['friend'], 1.0)
+        self.assertAlmostEqual(model_one.get_suffixes('goodbye')['friend'], 1.0)
+        self.assertAlmostEqual(model_one.get_suffixes('hello')['world'], 1.0)
+
+    def test_blank_update(self):
+        model_one = Markov(2)
+        model_two = Markov(2)
+        model_two.update(model_one)
+        self.assertEqual(len(model_two.graph), 0)  # FIXME: Tests class internal (Markov.graph)
+
+    def test_mismatched_update(self):
+        model_one = Markov(2)
+        model_two = Markov(3)
+
+        with self.assertRaises(ValueError) as context:
+            model_two.update(model_one)
+
 
 class ProbabilisticTests(TestCase):  # TODO: Test Markov.random_suffix method
     def test_random_ngram(self):
