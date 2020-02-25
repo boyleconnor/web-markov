@@ -6,6 +6,10 @@ class Markov:
     '''Graph-based N-Gram Markov Model
     '''
     def __init__(self, n):
+        if type(n) != int:
+            raise TypeError("N-gram length must be an integer")
+        elif n < 2:
+            raise ValueError("N-gram length must be at least 2")
         self.n = n
         self.graph = {}
 
