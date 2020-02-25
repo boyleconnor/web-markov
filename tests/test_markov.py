@@ -105,7 +105,7 @@ class ProbabilisticTests(TestCase):  # TODO: Test Markov.random_suffix method
         self.assertLess(sir_share, 0.15)
 
     def test_random_suffix(self):
-        ITERATIONS = 20000
+        ITERATIONS = 40000
 
         markov = Markov(2)
         markov.add_ngram('hello', 'world')
