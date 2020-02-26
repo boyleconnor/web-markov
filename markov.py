@@ -43,7 +43,8 @@ class Markov:
             self.graph[source][destination] += 1
 
     def get_suffixes(self, *prefix):
-        '''Return mapping of suffixes to probabilities for a given prefix.
+        '''Return mapping of suffixes to probabilities for a given prefix. The
+        mapping will be blank if the given prefix has never been observed.
 
         "prefix" is the first n-1 elements of the ngram, "suffix" is the last
         element of the ngram.
