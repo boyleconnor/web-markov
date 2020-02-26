@@ -3,7 +3,7 @@ from markov import Markov
 
 
 class TextMarkov(Markov):
-    def __init__(self, n, tokenize=None):
+    def __init__(self, n):
         '''Initialize an n-gram based markov model specifically made for
         handling text(s).
 
@@ -13,10 +13,17 @@ class TextMarkov(Markov):
 
         super().__init__(n)
 
-        if tokenize is None:
-            self.tokenize = lambda text: re.findall(r'\w+|\W+', text)
-        else:
-            self.tokenize = tokenize
+    def tokenize(self, text):
+        '''Convert text into tokens, including n-1 empty strings at the start
+        of the text/token string (indicating start of text), and one empty
+        string at the end, indicating end of text.
+
+        Excepting start and end of text, tokens are either words (as defined by
+        \w in regex) or everything between two words.
+        '''
+        prefix_length = self.n - 1
+
+        return [''] * prefix_length + re.findall(r'\w+|\W+', text) + ['']
 
     def read_text(self, text):
         '''Read a text as a series of ngrams. This method treats the beginning
@@ -31,7 +38,7 @@ class TextMarkov(Markov):
         '''
         prefix_length = self.n - 1
 
-        tokens = [''] * prefix_length + self.tokenize(text) + ['']
+        tokens =  self.tokenize(text)
 
         for i in range(len(tokens) - prefix_length):
             ngram = tokens[i:i+self.n]
