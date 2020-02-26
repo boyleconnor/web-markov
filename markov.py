@@ -59,7 +59,7 @@ class Markov:
             raise ValueError("prefix must be of length: %d" % (self.n-1,))
 
         if prefix not in self.graph:
-            raise KeyError("prefix %s is not the start of an ngram" % (prefix,))
+            return {}
 
         mapping = {}
         total_weight = sum(self.graph[prefix].values())
