@@ -25,6 +25,18 @@ class TextMarkov(Markov):
 
         return [''] * prefix_length + re.findall(r'\w+|\W+', text) + ['']
 
+    def join(self, *tokens):
+        '''Convert tokens into text, including n-1 empty strings at the start
+        of the sequence, and 1 empty string at the end (which indicates end of
+        text).
+
+        For this implementation, this method is the inverse of
+        TextMarkov.tokenize(). This version just concatenates the tokens
+        together. I'm making it its own method largely for
+        consistency/extensibility.
+        '''
+        return ''.join(tokens)
+
     def read_text(self, text):
         '''Read a text as a series of ngrams. This method treats the beginning
         of a text as (n-1) blank tokens (i.e. [""] * n-1) and the end of text
