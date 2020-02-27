@@ -1,9 +1,10 @@
+import math
 import os
 from text_markov import TextMarkov
 
 
-NGRAM_SIZE = 9
-ITERATIONS = 100
+NGRAM_SIZE = 5
+ITERATIONS = 10000
 
 
 def load_text(filepath):
@@ -41,20 +42,25 @@ if __name__ == '__main__':
         text = merge_markov.random_text()
         ngram_diffs = []
         text_tokens = merge_markov.tokenize(text)
+        total_bias = 0.0
         for i in range(len(text_tokens)-merge_markov.n):
             j = i + merge_markov.n
             ngram = text_tokens[i:j]
             ngram_diff = get_weight(bible_markov, *ngram) - get_weight(two_cities_markov, *ngram)
             ngram_diffs.append(ngram_diff)
-        if len(ngram_diffs) >= 1:
-            text_diff = max(ngram_diffs) - min(ngram_diffs)
-        else:
-            text_diff = 0
-        texts.append((text, text_diff))
+            total_bias += ngram_diff
+        text_diff = 0
+        for i in range(len(ngram_diffs)-1):
+            text_diff += abs(ngram_diffs[i+1]-ngram_diffs[i])
+        mean_text_diff = text_diff / math.log(len(text_tokens))
+        texts.append((text, mean_text_diff-abs(total_bias), ngram_diffs))
     print('random texts generation complete')
     
     print('ordering texts...')
     texts.sort(key=lambda x: x[1])
-    print('ordered texts:')
-    for text, diff in texts:
-        print('%.2f %s' % (diff, text))
+    print('top text:')
+    top = texts[-1]
+    text = top[0]
+    diff_shift = top[1]
+    diffs = ' '.join('%.2f' % (diff,) for diff in top[2])
+    print('\n%.2f\n\n%s\n%s\n' % (diff_shift, text, diffs))
