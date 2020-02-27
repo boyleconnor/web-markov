@@ -40,20 +40,20 @@ if __name__ == '__main__':
     texts = []
     for i in range(ITERATIONS):
         text = merge_markov.random_text()
-        ngram_diffs = []
+        movements = []
         text_tokens = merge_markov.tokenize(text)
-        total_bias = 0.0
+        net_bias = 0.0
         for i in range(len(text_tokens)-merge_markov.n):
             j = i + merge_markov.n
             ngram = text_tokens[i:j]
             ngram_diff = get_weight(bible_markov, *ngram) - get_weight(two_cities_markov, *ngram)
-            ngram_diffs.append(ngram_diff)
-            total_bias += ngram_diff
-        text_diff = 0
-        for i in range(len(ngram_diffs)-1):
-            text_diff += abs(ngram_diffs[i+1]-ngram_diffs[i])
-        mean_text_diff = text_diff / math.log(len(text_tokens))
-        texts.append((text, mean_text_diff-abs(total_bias), ngram_diffs))
+            movements.append(ngram_diff)
+            net_bias += ngram_diff
+        total_movement = 0
+        for i in range(len(movements)-1):
+            total_movement += abs(movements[i+1]-movements[i])
+        mean_text_diff = total_movement / math.log(len(text_tokens))
+        texts.append((text, mean_text_diff-abs(net_bias), movements))
     print('random texts generation complete')
     
     print('ordering texts...')
