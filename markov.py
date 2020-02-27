@@ -1,5 +1,6 @@
 import random
 import re
+from collections import deque
 
 
 class Markov:
@@ -106,3 +107,23 @@ class Markov:
     def random_ngram(self, *prefix):
         suffix = self.random_suffix(*prefix)
         return prefix + (suffix,)
+
+    def random_sequence(self, *prefix):
+        '''Probabilistically walk through the model, starting at prefix, and
+        ending at any prefix with no observed suffixes.
+        '''
+        prefix_length = self.n - 1
+        if len(prefix) != prefix_length:
+            raise ValueError("Bad prefix length: %d" % (len(prefix),))
+
+        prefix_queue = deque(prefix, prefix_length)
+        sequence = list(prefix_queue)
+
+        while True:
+            if self.get_suffixes(*prefix_queue) == {}:
+                return sequence
+            else:
+                suffix = self.random_suffix(*prefix_queue)
+                sequence.append(suffix)
+                prefix_queue.append(suffix)
+
