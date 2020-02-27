@@ -125,3 +125,32 @@ class ProbabilisticTests(TestCase):  # TODO: Test Markov.random_suffix method
 
         self.assertAlmostEqual(world_count / ITERATIONS, 4 / 5, 2)
         self.assertAlmostEqual(jessica_count / ITERATIONS, 1 / 5, 2)
+
+    def test_random_sequence(self):
+        ITERATIONS = 40000
+
+        message_one = ['hello', 'my', 'name', 'is', 'Michael']
+        message_two = ['hello', 'my', 'name', 'is', 'David']
+
+        markov = Markov(2)
+        markov.add_ngram('hello', 'my')
+        markov.add_ngram('my', 'name')
+        markov.add_ngram('name', 'is')
+        markov.add_ngram('is', 'Michael')
+
+        random_message = markov.random_sequence('hello')
+        self.assertEqual(random_message, message_one)
+
+        markov.add_ngram('is', 'David')
+
+        one_count = 0
+        two_count = 0
+        for i in range(ITERATIONS):
+            random_message = markov.random_sequence('hello')
+            if random_message == message_one:
+                one_count += 1
+            elif random_message == message_two:
+                two_count += 1
+
+        self.assertAlmostEqual(one_count / ITERATIONS, 1 / 2, 2)
+        self.assertAlmostEqual(two_count / ITERATIONS, 1 / 2, 2)
