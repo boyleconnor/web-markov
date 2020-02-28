@@ -2,6 +2,11 @@ from text_markov import TextMarkov
 
 
 class TextMerger:
+    '''A model that can train on two distinct sources of text, then generate
+    probabilistic text from their combination. The TextMerger can then provide
+    analyses of the produced text based on the training results from each
+    distinct source.
+    '''
     def __init__(self, n, source_one, source_two):
         '''source_one and source_two should each be an iterable containing a
         text.
