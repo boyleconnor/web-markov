@@ -25,3 +25,22 @@ class TextMerger:
         self.merged_markov.update(self.markov_one)
         self.merged_markov.update(self.markov_two)
 
+    def get_bias(self, *ngram):
+        '''Return a value (-1.0 <= v <= 1.0) representing the likelihood of
+        finding the value in the first source minus the likelihood of finding
+        it in the second source. For our purposes, if even the prefix has not
+        been observed, the probability is considered 0.0.
+        '''
+        prefix = ngram[:-1]
+        suffix = ngram[-1]
+        bias = 0.0
+
+        weights = self.markov_one.get_suffixes(*prefix)
+        if suffix in weights:
+            bias += weights[suffix]
+
+        weights = self.markov_two.get_suffixes(*prefix)
+        if suffix in weights:
+            bias -= weights[suffix]
+
+        return bias
