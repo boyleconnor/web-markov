@@ -1,3 +1,4 @@
+from collections import deque
 from text_markov import TextMarkov
 
 
@@ -44,3 +45,26 @@ class TextMerger:
             bias -= weights[suffix]
 
         return bias
+
+    def get_properties(self, *sequence):
+        '''Return a dictionary with info on the net_bias, movement, and
+        bias-by-token of the sequence.
+        '''
+        prefix_length = self.n - 1
+        start_of_text = ('',) * prefix_length
+
+        ngram = deque(start_of_text, self.n)
+        biases = [0.0] * prefix_length
+        movement = 0.0
+        net_bias = 0.0
+        previous_bias = 0.0
+        total_bias = 0.0
+        for i in range(prefix_length, len(sequence)):
+            ngram.append(sequence[i])
+            bias = self.get_bias(*ngram)
+            biases.append(bias)
+            net_bias += bias
+            total_bias += abs(bias)
+            movement += abs(bias - previous_bias)
+            previous_bias = bias
+        return {'biases': biases, 'net_bias': net_bias, 'movement': movement, 'total_bias': total_bias}
