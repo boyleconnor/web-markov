@@ -68,3 +68,12 @@ class TextMerger:
             movement += abs(bias - previous_bias)
             previous_bias = bias
         return {'biases': biases, 'net_bias': net_bias, 'movement': movement, 'total_bias': total_bias}
+
+    def random_sequence(self):
+        '''Return a sequence generated from a probabilistic walk through the
+        graph starting with start-of-text and ending with end-of-text.
+        '''
+        prefix_length = self.n - 1
+        start_of_text = ('',) * prefix_length
+        sequence = self.merged_markov.random_sequence(*start_of_text)
+        return sequence
