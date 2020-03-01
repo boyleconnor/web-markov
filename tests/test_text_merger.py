@@ -45,3 +45,11 @@ class TextMergerTests(TestCase):
                     'leo', ' ', 'aliquam', ' ', 'sodales', '.', '')
         properties = text_merger.get_properties(*sequence)
         print(properties)
+
+    def test_random_sequence(self):
+        N = 3
+        text_merger = TextMerger(3, SOURCE_ONE, SOURCE_TWO)
+        sequence = text_merger.random_sequence()
+        self.assertGreater(len(sequence), N + 1)
+        self.assertNotEqual(sequence[N - 1], '')
+        self.assertGreaterEqual(sequence.count(''), N)
