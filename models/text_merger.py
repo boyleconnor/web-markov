@@ -16,11 +16,11 @@ class TextMerger:
 
         self.markov_one = TextMarkov(n)
         for text in source_one:
-            self.markov_one.read_text(text)
+            self.markov_one.read_text(text.strip('\n'))
 
         self.markov_two = TextMarkov(n)
         for text in source_two:
-            self.markov_two.read_text(text)
+            self.markov_two.read_text(text.strip('\n'))
 
         self.merged_markov = TextMarkov(n)
         self.merged_markov.update(self.markov_one)
