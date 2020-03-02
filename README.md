@@ -100,3 +100,20 @@ element) is color-coded red, blue, or white, depending on its bias.
 
 
 The script `merge_demo.py` is a proof of concept for this functionality.
+
+
+Using the Project
+-----------------
+
+
+MarkovMerge requires Python 3 and has only been tested on Ubuntu 16.04. Some
+commands in the demo scripts produce color-coded output which is likely only
+compatible with certain UNIX-like operating systems.
+
+MarkovMerge can be installed by cloning or downloading its source code from
+GitHub at the following url:
+
+https://github.com/cascadianblue/MarkovMerge
+
+The demo scripts can be run by calling: `python3 merge_demo.py` or `python3
+single_demo.py` with the project root as the working directory. 
