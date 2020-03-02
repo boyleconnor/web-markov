@@ -33,4 +33,4 @@ if __name__ == '__main__':
             print('"q" or "quit" to quit')
 
         else:
-            print('Command not recognized')
+            print('Command not recognized. Input "h" for help.')

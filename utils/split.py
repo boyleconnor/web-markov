@@ -1,4 +1,3 @@
-
 def erraticity(sequence_properties):
     sequence, properties = sequence_properties
     return properties['movement'] - abs(properties['net_bias'])
