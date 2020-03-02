@@ -29,22 +29,23 @@ class TextMerger:
     def get_bias(self, *ngram):
         '''Return a value (-1.0 <= v <= 1.0) representing the likelihood of
         finding the value in the first source minus the likelihood of finding
-        it in the second source. For our purposes, if even the prefix has not
-        been observed, the probability is considered 0.0.
+        it in the second source. For our purposes, if the ngram has not been
+        observed at all in the opposite source, it will be regarded as p = 1.0
+        in this source.
         '''
         prefix = ngram[:-1]
         suffix = ngram[-1]
         bias = 0.0
 
-        weights = self.markov_one.get_suffixes(*prefix)
-        if suffix in weights:
-            bias += weights[suffix]
+        weights_one = self.markov_one.get_suffixes(*prefix)
+        weights_two = self.markov_two.get_suffixes(*prefix)
 
-        weights = self.markov_two.get_suffixes(*prefix)
-        if suffix in weights:
-            bias -= weights[suffix]
-
-        return bias
+        if suffix in weights_one and suffix not in weights_two:
+            return 1.0
+        elif suffix not in weights_one and suffix in weights_two:
+            return -1.0
+        else:
+            return weights_one[suffix] - weights_two[suffix]
 
     def get_properties(self, *sequence):
         '''Return a dictionary with info on the net_bias, movement, and
