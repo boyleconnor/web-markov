@@ -19,6 +19,21 @@ def get_n(default_n):
             return n
 
 
+def get_iterations(default_iterations):
+    while True:
+        try:
+            n = input('Input number of iterations (default = %d): ' % (default_iterations,))
+            if n == '':
+                return default_iterations
+            n = int(n)
+            if n < 1:
+                raise ValueError()
+        except ValueError:
+            print("iterations must be an integer greater or equal to 1")
+        else:
+            return n
+
+
 def get_source_path(default_source):
     source_files = os.listdir(SOURCE_DIR)
     while True:
