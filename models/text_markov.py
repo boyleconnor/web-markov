@@ -1,5 +1,5 @@
 import re
-from markov import Markov
+from models.markov import Markov
 
 
 class TextMarkov(Markov):

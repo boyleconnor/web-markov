@@ -1,5 +1,5 @@
 from unittest import TestCase
-from text_merger import TextMerger
+from models.text_merger import TextMerger
 
 
 SOURCE_ONE = [
@@ -44,7 +44,6 @@ class TextMergerTests(TestCase):
         sequence = ('', '', 'Donec', ' ', 'ut', ' ', 'purus', ' ', 'eu', ' ',
                     'leo', ' ', 'aliquam', ' ', 'sodales', '.', '')
         properties = text_merger.get_properties(*sequence)
-        print(properties)
 
     def test_random_sequence(self):
         N = 3

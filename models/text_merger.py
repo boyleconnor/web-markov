@@ -1,5 +1,5 @@
 from collections import deque
-from text_markov import TextMarkov
+from models.text_markov import TextMarkov
 
 
 class TextMerger:

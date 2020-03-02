@@ -1,5 +1,5 @@
-from text_markov import TextMarkov
 from unittest import TestCase
+from models.text_markov import TextMarkov
 
 
 class TextMarkovTest(TestCase):

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from markov import Markov
+from models.markov import Markov
 
 
 class DeterministicTests(TestCase):
