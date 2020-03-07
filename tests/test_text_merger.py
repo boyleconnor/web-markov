@@ -39,11 +39,15 @@ class TextMergerTests(TestCase):
         self.assertAlmostEqual(text_merger.get_bias('ut', ' ','purus'), 1 / 3)
         self.assertAlmostEqual(text_merger.get_bias('Nam', ' ', 'nec'), 0.0)
 
-    def test_get_properties(self):
+    def test_get_biases(self):
         text_merger = TextMerger(3, SOURCE_ONE, SOURCE_TWO)
         sequence = ('', '', 'Donec', ' ', 'ut', ' ', 'purus', ' ', 'eu', ' ',
                     'leo', ' ', 'aliquam', ' ', 'sodales', '.', '')
-        properties = text_merger.get_properties(*sequence)
+        biases = text_merger.get_biases(*sequence)
+        self.assertEqual(len(biases), 17)
+        self.assertEqual(biases[0], 0.0)
+        self.assertEqual(biases[-1], 0.0)
+        self.assertEqual(biases[2], 1.0)
 
     def test_random_sequence(self):
         N = 3
