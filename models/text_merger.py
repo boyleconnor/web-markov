@@ -47,7 +47,7 @@ class TextMerger:
         else:
             return weights_one[suffix] - weights_two[suffix]
 
-    def get_properties(self, *sequence):
+    def get_biases(self, *sequence):
         '''Return a dictionary with info on the net_bias, movement, and
         bias-by-token of the sequence.
         '''
@@ -56,19 +56,13 @@ class TextMerger:
 
         ngram = deque(start_of_text, self.n)
         biases = [0.0] * prefix_length
-        movement = 0.0
-        net_bias = 0.0
-        previous_bias = 0.0
-        total_bias = 0.0
+
         for i in range(prefix_length, len(sequence)):
             ngram.append(sequence[i])
             bias = self.get_bias(*ngram)
             biases.append(bias)
-            net_bias += bias
-            total_bias += abs(bias)
-            movement += abs(bias - previous_bias)
-            previous_bias = bias
-        return {'biases': biases, 'net_bias': net_bias, 'movement': movement, 'total_bias': total_bias}
+
+        return tuple(biases)
 
     def random_sequence(self):
         '''Return a sequence generated from a probabilistic walk through the
@@ -78,3 +72,32 @@ class TextMerger:
         start_of_text = ('',) * prefix_length
         sequence = self.merged_markov.random_sequence(*start_of_text)
         return sequence
+
+
+class MergedSequence:
+    def __init__(self, tokens, biases):
+        if len(tokens) != len(biases):
+            raise ValueError("Each token must have an associated bias")
+        self.tokens = tokens
+        self.biases = biases
+        self.net_bias = 0.0
+        self.total_bias = 0.0
+        self.movement = 0.0
+
+        previous_bias = 0.0
+        for bias in biases:
+            self.net_bias += bias
+            self.total_bias += abs(bias)
+            self.movement += abs(bias - previous_bias)
+            previous_bias = bias
+
+    def get_token_biases(self):
+        '''Returns ordered collection of a (token, bias) pairs.
+        '''
+        return zip(tokens, biases)
+
+    def erraticity(self):
+        return self.movement - abs(self.net_bias)
+
+    def neutrality(self):
+        return len(self.tokens) - self.total_bias - abs(self.net_bias)
