@@ -1,5 +1,6 @@
 import os
-from models.text_merger import TextMerger
+from heapq import nlargest
+from models.text_merger import TextMerger, MergedSequence
 from utils import user_input, color, split
 
 
@@ -7,8 +8,17 @@ DEFAULTS = {
     'n': 5,
     'source_one': 'frankenstein.txt',
     'source_two': 'trump.txt',
-    'erratic_iterations': 1000
+    'erratic_iterations': 1000,
+    'sequences': 5
 }
+
+
+def generate_sequences(model, iterations):
+    for i in range(iterations):
+        sequence = model.random_sequence()
+        biases = model.get_biases(*sequence)
+        merged_sequence = MergedSequence(sequence, biases)
+        yield MergedSequence(sequence, biases)
 
 
 if __name__ == '__main__':
@@ -29,15 +39,16 @@ if __name__ == '__main__':
 
         if command in {'e', 'erratic'}:
             iterations = user_input.get_iterations(default_iterations=DEFAULTS['erratic_iterations'])
-            sequence_properties = []
+            sample_size = user_input.get_sample_size(default_sequences=DEFAULTS['sequences'])
 
-            for i in range(iterations):
-                sequence = model.random_sequence()
-                properties = model.get_properties(*sequence)
-                sequence_properties.append((sequence, properties))
+            sequences = generate_sequences(model, iterations)
+            sample = nlargest(sample_size, sequences, key=MergedSequence.erraticity)
 
-            sequence, properties = max(sequence_properties, key=split.erraticity)
-            print(color.colored_text(sequence, properties['biases']))
+            for i in range(len(sample)):
+                merged_sequence = sample[i]
+                print('Sequence #%d:' % (i+1,))
+                print('Erraticity: %.2f' % (merged_sequence.erraticity(),))
+                print(color.colored_text(merged_sequence.tokens, merged_sequence.biases))
 
         elif command in {'t': 'text'}:
             sequence = model.random_sequence()
