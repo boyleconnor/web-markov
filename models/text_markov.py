@@ -1,5 +1,5 @@
 import re
-from models.markov import Markov
+from .markov import Markov
 
 
 class TextMarkov(Markov):
@@ -49,6 +49,7 @@ class TextMarkov(Markov):
         is grouped together as one token).
         '''
         prefix_length = self.n - 1
+
 
         tokens =  self.tokenize(text)
 
