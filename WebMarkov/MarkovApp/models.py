@@ -1,3 +1,4 @@
+from io import TextIOWrapper
 from django.db.models import Model, FileField, PositiveSmallIntegerField, ForeignKey, CASCADE
 from picklefield.fields import PickledObjectField
 from MarkovMerge.models.text_markov import TextMarkov
@@ -17,8 +18,9 @@ class SingleMarkov(Model):
         '''
         if self.markov_model is None:
             self.markov_model = TextMarkov(self.ngram_size)
-            for line in self.source_file:
-                self.markov_model.read_text(line)  # FIXME: Why do we have to decode?
+            wrapper = TextIOWrapper(self.source_file)  # FIXME: This seems hacky
+            for line in wrapper:
+                self.markov_model.read_text(line)
         return super().save(*args, **kwargs)
 
 
@@ -34,5 +36,6 @@ class MergedMarkov(Model):
         '''
         if self.merged_model is None:
             self.merged_model = TextMerger(self.ngram_size,
-                    self.source_one.source_file, self.source_two.source_file)
+                    TextIOWrapper(self.source_one.source_file),
+                    TextIOWrapper(self.source_two.source_file))  # FIXME: The TextIOWrapper's seem hacky
         return super().save(*args, **kwargs)
