@@ -1,8 +1,5 @@
 <html>
-	{% for single_markov in single_markovs %}
-	<p>{{ single_markov.source_file.name }}</p>
-	{% endfor %}
-	<p>{% for merged_markov in merged_markovs %}</p>
-	{{ merged_markov }}
+	{% for source in sources %}
+	<p>{{ source.name }}</p>
 	{% endfor %}
 </html>
