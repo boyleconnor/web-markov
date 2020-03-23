@@ -1,8 +1,14 @@
 from django.forms import ModelForm
-from MarkovApp.models import SingleMarkov
+from MarkovApp.models import Source, SingleMarkov
+
+
+class SourceForm(ModelForm):
+    class Meta:
+        model = Source
+        fields = ['source_file', 'name']
 
 
 class SingleMarkovForm(ModelForm):
     class Meta:
         model = SingleMarkov
-        fields = ['source_file', 'ngram_size']
+        fields = ['source', 'ngram_size']
