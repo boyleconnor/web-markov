@@ -1,7 +1,8 @@
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
-from MarkovApp.models import SingleMarkov, MergedMarkov
-from MarkovApp.forms import SingleMarkovForm
+from MarkovApp.models import Source, SingleMarkov, MergedMarkov
+from MarkovApp.forms import SourceForm, SingleMarkovForm
 
 
 class Home(TemplateView):
@@ -12,6 +13,7 @@ class Home(TemplateView):
 
         # Send (up to) 5 Merged & Single Markovs to the template
         # FIXME: Think of ordering them
+        context['sources'] = Source.objects.all()[:5]
         context['single_markovs'] = SingleMarkov.objects.all()[:5]
         context['merged_markovs'] = MergedMarkov.objects.all()[:5]
 
@@ -20,4 +22,8 @@ class Home(TemplateView):
 
 class UploadSource(CreateView):
     template_name = 'upload_source.html'
-    form_class = SingleMarkovForm
+    form_class = SourceForm
+
+class SourceDetail(DetailView):
+    template_name = 'source.html'
+    model = Source
