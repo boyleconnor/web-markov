@@ -1,32 +1,32 @@
 from django.test import TestCase
-from MarkovApp.models import SingleMarkov, MergedMarkov
+from MarkovApp.models import Source, SingleMarkov, MergedMarkov
 from django.core.files import File
 
 # Create your tests here.
 
 class SingleMarkovTest(TestCase):
     def test_initializer(self):
-        with open('MarkovMerge/sources/hamlet.txt', 'rb') as hamlet:
-            hamlet_file = File(hamlet, name='hamlet.txt')
-            single_markov = SingleMarkov.objects.create(source_file=hamlet_file)
-        single_markov.source_file.delete()
-        single_markov.delete()
+        with open('MarkovMerge/sources/hamlet.txt', 'rb') as hamlet_file:
+            mock_file = File(hamlet_file, name='hamlet.txt')
+            hamlet_source = Source.objects.create(source_file=mock_file, name="Shakespeare's Hamlet")
+            hamlet_markov = SingleMarkov.objects.create(source=hamlet_source)
+            hamlet_source.source_file.delete()
 
     def test_generate_text(self):
-        with open('MarkovMerge/sources/trump.txt', 'rb') as trump:
-            trump_file = File(trump, name='trump.txt')
-            markov_one = SingleMarkov.objects.create(source_file=trump_file)
-        random_text = markov_one.markov_model.random_text()
-        self.assertGreater(len(random_text), 1)
-        markov_one.source_file.delete()
-        markov_one.delete()
+        with open('MarkovMerge/sources/trump.txt', 'rb') as trump_file:
+            mock_file = File(trump_file, name='trump.txt')
+            trump_source = Source.objects.create(source_file=mock_file, name="Trump's Twitter")
+            trump_markov = SingleMarkov.objects.create(source=trump_source)
+            random_text = trump_markov.markov_model.random_text()
+            self.assertGreater(len(random_text), 1)
+            trump_source.source_file.delete()
 
     def test_get_from_db(self):
-        with open('MarkovMerge/sources/frankenstein.txt', 'rb') as frankenstein:
-            frankenstein_file = File(frankenstein, name='frankenstein.txt')
-            SingleMarkov.objects.create(source_file=frankenstein_file)
-
-        frankenstein_markov = SingleMarkov.objects.get()
-        self.assertEqual(frankenstein_markov.pk, 1)
-        frankenstein_markov.source_file.delete()
-        frankenstein_markov.delete()
+        with open('MarkovMerge/sources/frankenstein.txt', 'rb') as frankenstein_file:
+            mock_file = File(frankenstein_file, name='frankenstein.txt')
+            Source.objects.create(source_file=mock_file, name='Frankenstein')
+            frankenstein_source = Source.objects.get()
+            SingleMarkov.objects.create(source=frankenstein_source)
+            frankenstein_markov = SingleMarkov.objects.get()
+            self.assertEqual(frankenstein_markov.pk, 1)
+            frankenstein_source.source_file.delete()
