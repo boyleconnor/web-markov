@@ -12,6 +12,9 @@ class Source(Model):
     name = CharField(max_length=100, blank=False, unique=True)
     source_file = FileField(upload_to='sources/')
 
+    def __str__(self):
+        return self.name
+
     def get_absolute_url(self):
         return reverse('source_detail', kwargs={'pk': self.pk})
 
@@ -21,11 +24,14 @@ class SingleMarkov(Model):
     ngram_size = PositiveSmallIntegerField(default=DEFAULT_NGRAM_SIZE)
     markov_model = PickledObjectField()
 
+    class Meta:
+        unique_together = ['source', 'ngram_size']
+
     def get_absolute_url(self):
         return reverse('singlemarkov_detail', kwargs={'pk': self.pk})
 
-    class Meta:
-        unique_together = ['source', 'ngram_size']
+    def __str__(self):
+        return '"%s" (n = %d)' % (self.source.name, self.ngram_size)
 
     def save(self, *args, **kwargs):
         '''Enforces the following: .markov_model is a TextMarkov based off the
