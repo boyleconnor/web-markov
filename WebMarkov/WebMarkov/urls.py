@@ -20,7 +20,7 @@ from MarkovApp.views import Home, UploadSource, SourceDetail, \
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('upload/', UploadSource.as_view()),
+    path('upload/', UploadSource.as_view(), name='upload_source'),
     path('source/<pk>/', SourceDetail.as_view(), name='source_detail'),
     path('singlemarkov/create/', SingleMarkovCreate.as_view(), name='singlemarkov_create'),
     path('singlemarkov/<pk>/', SingleMarkovDetail.as_view(), name='singlemarkov_detail'),
