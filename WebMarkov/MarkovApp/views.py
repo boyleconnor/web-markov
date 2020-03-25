@@ -25,5 +25,11 @@ class UploadSource(CreateView):
     form_class = SourceForm
 
 class SourceDetail(DetailView):
-    template_name = 'source.html'
+    template_name = 'source_detail.html'
     model = Source
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        source_file = self.object.source_file
+        context['first_ten_texts'] = [source_file.readline() for i in range(10)]
+        return context
