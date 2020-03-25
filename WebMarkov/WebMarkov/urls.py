@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from MarkovApp.views import Home, UploadSource
+from MarkovApp.views import Home, UploadSource, SourceDetail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', UploadSource.as_view()),
+    path('source/<pk>/', SourceDetail.as_view(), name='source_detail'),
     path('', Home.as_view()),
 ]
