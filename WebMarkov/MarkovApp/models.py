@@ -21,6 +21,9 @@ class SingleMarkov(Model):
     ngram_size = PositiveSmallIntegerField(default=DEFAULT_NGRAM_SIZE)
     markov_model = PickledObjectField()
 
+    def get_absolute_url(self):
+        return reverse('singlemarkov_detail', kwargs={'pk': self.pk})
+
     class Meta:
         unique_together = ['source', 'ngram_size']
 
