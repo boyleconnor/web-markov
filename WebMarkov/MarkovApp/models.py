@@ -1,5 +1,6 @@
 from io import TextIOWrapper
 from django.db.models import Model, FileField, PositiveSmallIntegerField, CharField, ForeignKey, CASCADE
+from django.urls import reverse
 from picklefield.fields import PickledObjectField
 from MarkovMerge.models.text_markov import TextMarkov
 from MarkovMerge.models.text_merger import TextMerger
@@ -10,6 +11,9 @@ DEFAULT_NGRAM_SIZE = 5
 class Source(Model):
     name = CharField(max_length=100, blank=False, unique=True)
     source_file = FileField(upload_to='sources/')
+
+    def get_absolute_url(self):
+        return reverse('source_detail', kwargs={'pk': self.pk})
 
 
 class SingleMarkov(Model):
