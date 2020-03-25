@@ -1,0 +1,17 @@
+<html>
+	<title>Markov Model: {{ singlemarkov }}</title>
+	<table>
+		<tr>
+			<th>Source file</th>
+			<td><a href="{{ singlemarkov.source.get_absolute_url }}">{{ singlemarkov.source }}</a></td>
+		</tr>
+		<tr>
+			<th>Ngram Size</th>
+			<td>{{ singlemarkov.ngram_size }}</td>
+		</tr>
+		<tr>
+			<th>Random text</th>
+			<td>{{ singlemarkov.markov_model.random_text }}</td>
+		</tr>
+	</table>
+</html>

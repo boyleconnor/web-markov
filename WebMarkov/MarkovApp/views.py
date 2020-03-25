@@ -24,6 +24,7 @@ class UploadSource(CreateView):
     template_name = 'upload_source.html'
     form_class = SourceForm
 
+
 class SourceDetail(DetailView):
     template_name = 'source_detail.html'
     model = Source
@@ -33,3 +34,13 @@ class SourceDetail(DetailView):
         source_file = self.object.source_file
         context['first_ten_texts'] = [source_file.readline() for i in range(10)]
         return context
+
+
+class SingleMarkovCreate(CreateView):
+    template_name = 'singlemarkov_create.html'
+    form_class = SingleMarkovForm
+
+
+class SingleMarkovDetail(DetailView):
+    template_name = 'singlemarkov_detail.html'
+    model = SingleMarkov
