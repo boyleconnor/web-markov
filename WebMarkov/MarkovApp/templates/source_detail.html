@@ -4,7 +4,7 @@
 		<h2>{{ source.name }}</h2>
 		<h3>Single Markov Models that use this source:</h3>
 		{% for single_markov in source.singlemarkov_set.all %}
-		{{ single_markov.ngram_size }}
+		<p><a href="{{ single_markov.get_absolute_url }}">{{ single_markov }}</a></p>
 		{% endfor %}
 		<h3>Source contents: </h3>
 		{% for text in first_ten_texts  %}
