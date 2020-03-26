@@ -1,7 +1,11 @@
-<html>
+{% extends 'base.html' %}
+
+{% block title %}Source Upload{% endblock %}
+
+{% block content %}
 	<form method="post" enctype="multipart/form-data">
 		{{ form }}
 		{% csrf_token %}
 		<input type="submit" value="Upload">
 	</form>
-</html>
+{% endblock %}

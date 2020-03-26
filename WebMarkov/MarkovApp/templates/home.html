@@ -1,13 +1,16 @@
-<html>
-        <h3>Text sources:</h3>
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+{% block content %}
+	<h3>Text sources:</h3>
 	{% for source in sources %}
-        <p><a href="{{ source.get_absolute_url }}">{{ source }}</a></p>
+	<p><a href="{{ source.get_absolute_url }}">{{ source }}</a></p>
 	{% endfor %}
-        <h3>Markov models:</h3>
+	<h3>Markov models:</h3>
 	{% for single_markov in single_markovs %}
-        <p><a href="{{ single_markov.get_absolute_url }}">{{ single_markov }}</a></p>
-        {% endfor %}
-        <h3>Contribute:</h3>
-        <p><a href="{% url 'upload_source' %}">Upload a text source</a></p>
-        <p><a href="{% url 'singlemarkov_create' %}">Create a markov model based on a text source</a></p>
-</html>
+	<p><a href="{{ single_markov.get_absolute_url }}">{{ single_markov }}</a></p>
+	{% endfor %}
+	<h3>Contribute:</h3>
+	<p><a href="{% url 'upload_source' %}">Upload a text source</a></p>
+	<p><a href="{% url 'singlemarkov_create' %}">Create a markov model based on a text source</a></p>
+{% endblock %}

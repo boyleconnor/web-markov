@@ -1,14 +1,14 @@
-<html>
-	<title>Source - {{ source.name }}</title>
-	<body>
-		<h2>{{ source.name }}</h2>
-		<h3>Single Markov Models that use this source:</h3>
-		{% for single_markov in source.singlemarkov_set.all %}
-		<p><a href="{{ single_markov.get_absolute_url }}">{{ single_markov }}</a></p>
-		{% endfor %}
-		<h3>Source contents: </h3>
-		{% for text in first_ten_texts  %}
-		<p>{{ text.decode }}</p>
-		{% endfor %}
-	</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Source: {{ source.name }}{% endblock %}
+
+{% block content %}
+	<h2>{{ source.name }}</h2>
+	<h3>Single Markov Models that use this source:</h3>
+	{% for single_markov in source.singlemarkov_set.all %}
+	<p><a href="{{ single_markov.get_absolute_url }}">{{ single_markov }}</a></p>
+	{% endfor %}
+	<h3>Source contents: </h3>
+	{% for text in first_ten_texts  %}
+	<p>{{ text.decode }}</p>
+	{% endfor %}
+{% endblock %}

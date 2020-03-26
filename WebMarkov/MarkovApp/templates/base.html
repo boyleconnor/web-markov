@@ -1,0 +1,11 @@
+<html>
+	<title>WebMarkov - {% block title %}{% endblock %}</title>
+	<body>
+		<div id="navbar">
+			<a href="{% url 'home' %}">Home</a>
+		</div>
+		<div id="content">
+		{% block content %}{% endblock %}
+		</div>
+	</body>
+</html>

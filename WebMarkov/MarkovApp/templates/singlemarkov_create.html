@@ -1,7 +1,11 @@
-<html>
+{% extends 'base.html' %}
+
+{% block title %}Create a Markov Model{% endblock %}
+
+{% block content %}
 	<form method="post" enctype="multipart/form-data">
 		{{ form }}
 		{% csrf_token %}
-		<input type="submit" value="Create Markov">
+		<input type="submit" value="Create Markov Model">
 	</form>
-</html>
+{% endblock %}
