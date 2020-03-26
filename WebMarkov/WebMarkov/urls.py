@@ -24,5 +24,5 @@ urlpatterns = [
     path('source/<pk>/', SourceDetail.as_view(), name='source_detail'),
     path('singlemarkov/create/', SingleMarkovCreate.as_view(), name='singlemarkov_create'),
     path('singlemarkov/<pk>/', SingleMarkovDetail.as_view(), name='singlemarkov_detail'),
-    path('', Home.as_view()),
+    path('', Home.as_view(), name='home'),
 ]
