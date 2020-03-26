@@ -49,17 +49,17 @@ class MergedMarkov(Model):
     ngram_size = PositiveSmallIntegerField(default=DEFAULT_NGRAM_SIZE)
     source_one = ForeignKey(Source, on_delete=CASCADE, related_name='merged_one')
     source_two = ForeignKey(Source, on_delete=CASCADE, related_name='merged_two')
-    merged_model = PickledObjectField()
+    markov_model = PickledObjectField()
 
     class Meta:
         unique_together = ['source_one', 'source_two', 'ngram_size']
 
     def save(self, *args, **kwargs):
-        '''Enforces the following: .merged_model is a TextMerger based off
+        '''Enforces the following: .markov_model is a TextMerger based off
         .source_one and .source_two.
         '''
-        if self.merged_model is None:
-            self.merged_model = TextMerger(self.ngram_size,
+        if self.markov_model is None:
+            self.markov_model = TextMerger(self.ngram_size,
                     TextIOWrapper(self.source_one.source_file),
                     TextIOWrapper(self.source_two.source_file))  # FIXME: The TextIOWrapper's seem hacky
         return super().save(*args, **kwargs)
