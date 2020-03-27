@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Create a Merged Markov Model{% endblock %}
+
+{% block content %}
+	<h3>Create a Markov Model based on two text sources</h3>
+	<form method="post" enctype="multipart/form-data">
+		{{ form }}
+		{% csrf_token %}
+		<input type="submit" value="Create Markov Model">
+	</form>
+{% endblock %}

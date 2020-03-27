@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Markov Model: {{ mergedmarkov }}{% endblock %}
+
+{% block content %}
+<table>
+	<tr>
+		<th>Source one</th>
+		<td><a href="{{ mergedmarkov.source_one.get_absolute_url }}">{{ mergedmarkov.source_one }}</a></td>
+	</tr>
+	<tr>
+		<th>Source two</th>
+		<td><a href="{{ mergedmarkov.source_two.get_absolute_url }}">{{ mergedmarkov.source_two }}</a></td>
+	</tr>
+	<tr>
+		<th>Ngram Size</th>
+		<td>{{ mergedmarkov.ngram_size }}</td>
+	</tr>
+	<tr>
+		<th>Random text</th>
+		<td>{{ mergedmarkov.markov_model.random_sequence|join:'' }}</td>
+	</tr>
+</table>
+{% endblock %}

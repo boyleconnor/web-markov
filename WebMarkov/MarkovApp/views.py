@@ -2,7 +2,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from MarkovApp.models import Source, SingleMarkov, MergedMarkov
-from MarkovApp.forms import SourceForm, SingleMarkovForm
+from MarkovApp.forms import SourceForm, SingleMarkovForm, MergedMarkovForm
 
 
 class Home(TemplateView):
@@ -44,3 +44,13 @@ class SingleMarkovCreate(CreateView):
 class SingleMarkovDetail(DetailView):
     template_name = 'singlemarkov_detail.html'
     model = SingleMarkov
+
+
+class MergedMarkovCreate(CreateView):
+    template_name = 'mergedmarkov_create.html'
+    form_class = MergedMarkovForm
+
+
+class MergedMarkovDetail(DetailView):
+    template_name = 'mergedmarkov_detail.html'
+    model = MergedMarkov
