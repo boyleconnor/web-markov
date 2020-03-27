@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from MarkovApp.views import Home, UploadSource, SourceDetail, \
-                            SingleMarkovCreate, SingleMarkovDetail
+                            SingleMarkovCreate, SingleMarkovDetail, \
+                            MergedMarkovCreate, MergedMarkovDetail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,5 +25,7 @@ urlpatterns = [
     path('source/<pk>/', SourceDetail.as_view(), name='source_detail'),
     path('singlemarkov/create/', SingleMarkovCreate.as_view(), name='singlemarkov_create'),
     path('singlemarkov/<pk>/', SingleMarkovDetail.as_view(), name='singlemarkov_detail'),
+    path('mergedmarkov/create/', MergedMarkovCreate.as_view(), name='mergedmarkov_create'),
+    path('mergedmarkov/<pk>/', MergedMarkovDetail.as_view(), name='mergedmarkov_detail'),
     path('', Home.as_view(), name='home'),
 ]
