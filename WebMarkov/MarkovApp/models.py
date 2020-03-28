@@ -54,6 +54,9 @@ class MergedMarkov(Model):
     class Meta:
         unique_together = ['source_one', 'source_two', 'ngram_size']
 
+    def get_absolute_url(self):
+        return reverse('mergedmarkov_detail', kwargs={'pk': self.pk})
+
     def save(self, *args, **kwargs):
         '''Enforces the following: .markov_model is a TextMerger based off
         .source_one and .source_two.
