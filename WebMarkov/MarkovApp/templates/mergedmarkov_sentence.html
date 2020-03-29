@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load markov_utils %}
+
+{% block title %}Random Sentence for {{ mergedmarkov }}{% endblock %}
+
+{% block content %}
+<p>
+{% for token_and_bias in sequence_and_biases %}
+    <font color="{{ token_and_bias.1|bias_to_color }}">{{ token_and_bias.0 }}</font>
+{% endfor %}
+</p>
+{% endblock %}

@@ -54,3 +54,17 @@ class MergedMarkovCreate(CreateView):
 class MergedMarkovDetail(DetailView):
     template_name = 'mergedmarkov_detail.html'
     model = MergedMarkov
+
+
+class MergedMarkovSentence(DetailView):
+    template_name = 'mergedmarkov_sentence.html'
+    model = MergedMarkov
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        sequence = self.object.markov_model.random_sequence()
+        print(sequence)
+        biases = self.object.markov_model.get_biases(*sequence)
+        print(biases)
+        context['sequence_and_biases'] = zip(sequence, biases)
+        return context
