@@ -14,10 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from MarkovApp.views import Home, UploadSource, SourceDetail, \
                             SingleMarkovCreate, SingleMarkovDetail, \
                             MergedMarkovCreate, MergedMarkovDetail, MergedMarkovSentence
+from MarkovApp.api import api_router
+
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +33,5 @@ urlpatterns = [
     path('mergedmarkov/<pk>/', MergedMarkovDetail.as_view(), name='mergedmarkov_detail'),
     path('mergedmarkov/<pk>/sentence/', MergedMarkovSentence.as_view(), name='mergedmarkov_sentence'),
     path('', Home.as_view(), name='home'),
+    path('api/', include(api_router.urls)),
 ]
