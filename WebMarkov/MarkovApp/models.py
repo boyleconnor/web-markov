@@ -30,6 +30,10 @@ class SingleMarkov(Model):
     def get_absolute_url(self):
         return reverse('singlemarkov_detail', kwargs={'pk': self.pk})
 
+    def random_sequence(self):
+        prefix = ('',) * (self.ngram_size - 1)
+        return self.markov_model.random_sequence(*prefix)
+
     def __str__(self):
         return '"%s" (n = %d)' % (self.source.name, self.ngram_size)
 
