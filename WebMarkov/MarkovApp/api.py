@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from MarkovApp.models import Source, SingleMarkov, MergedMarkov
 from MarkovApp.serializers import SourceSerializer, SingleMarkovSerializer, \
-        MergedMarkovSerializer, SingleSequenceSerializer
+        MergedMarkovSerializer
 
 
 class SourceViewSet(ModelViewSet):
@@ -18,9 +18,12 @@ class SingleMarkovViewSet(ModelViewSet):
 
     @action(detail=True)
     def random_sequence(self, request, pk=None):
-        single_markov = self.get_object()
-        serializer = SingleSequenceSerializer(single_markov, context={'request': request})
-        return Response(serializer.data)
+        markov_model = self.get_object().markov_model
+        prefix_length = markov_model.n - 1
+        prefix = ('',) * prefix_length
+        return Response({
+            'sequence': markov_model.random_sequence(*prefix)
+        })
 
 
 class MergedMarkovViewSet(ModelViewSet):
