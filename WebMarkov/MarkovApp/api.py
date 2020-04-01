@@ -30,6 +30,16 @@ class MergedMarkovViewSet(ModelViewSet):
     queryset = MergedMarkov.objects.all()
     serializer_class = MergedMarkovSerializer
 
+    @action(detail=True)
+    def random_sequence(self, request, pk=None):
+        text_merger = self.get_object().markov_model
+        sequence = text_merger.random_sequence()
+        biases = text_merger.get_biases(*sequence)
+        return Response({
+            'sequence': sequence,
+            'biases': biases
+        })
+
 
 api_router = DefaultRouter()
 api_router.register('source', SourceViewSet)
