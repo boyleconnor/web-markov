@@ -1,5 +1,4 @@
 from django import template
-from MarkovMerge.utils.color import rgb
 
 
 register = template.Library()

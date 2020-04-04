@@ -20,7 +20,7 @@ class DeterministicMarkovTests(TestCase):
         self.assertEqual(hello__prefix.suffixes.get(token='friend').weight, 1)
 
     def test_train_on_source(self):
-        with open('MarkovMerge/sources/trump.txt', 'rb') as trump_file:
+        with open('../sources/trump.txt', 'rb') as trump_file:
             mock_file = File(trump_file, name='trump.txt')
             trump_source = Source.objects.create(source_file=mock_file, name="Trump's Twitter")
             markov = Markov.objects.create(name="TrumpBot")
