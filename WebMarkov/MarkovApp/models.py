@@ -3,6 +3,7 @@ import re
 from collections import deque
 from io import TextIOWrapper
 from django.db import models
+from .utils import source_to_graph
 
 
 DEFAULT_N = 5
@@ -32,11 +33,11 @@ class Markov(models.Model):
         for i in range(len(tokens)-(self.n-1)):
             prefix_tokens = ''.join(tokens[i:i+self.n-1])
             suffix_token = tokens[i+self.n-1]
-            prefix, created = self.prefixes.get_or_create(tokens=prefix_tokens)
+            prefix, created = self.prefixes.get_or_create(tokens=prefix_tokens, defaults={'occurrences': 1})
             if not created:
                 prefix.occurrences += 1
                 prefix.save()
-            suffix, created = prefix.suffixes.get_or_create(token=suffix_token)
+            suffix, created = prefix.suffixes.get_or_create(token=suffix_token, defaults={'weight': 1})
             if not created:
                 suffix.weight += 1
                 suffix.save()
@@ -45,10 +46,35 @@ class Markov(models.Model):
         if source in self.trained_on.all():
             raise ValueError("Markov: %s has alrady been trained on source: %s"
                     % (repr(source), str(source)))
-        for line in source.source_file:
-            print("Processing line: ")
-            print(line.decode())
-            self.read_text(line.decode())
+        source_file = TextIOWrapper(source.source_file)
+        print("Generating graph...")
+        graph = source_to_graph(source_file, self.tokenizer, self.n)
+        print("Graph generated")
+        prefix_number = 0
+        updated_prefixes = []
+        updated_suffixes = []
+        for prefix_tokens in graph:
+            # prefix_number += 1
+            # print("Saving prefix #%d of %d to database\r" % (prefix_number, len(graph)), end="")
+            prefix_string = ''.join(prefix_tokens)
+            occurrences = sum(graph[prefix_tokens].values())
+            prefix, created_prefix = self.prefixes.get_or_create(tokens=prefix_string, defaults={'occurrences': occurrences})
+            if not created_prefix:
+                prefix.occurrences += occurrences
+                updated_prefixes.append(prefix)
+            for suffix_token, weight in graph[prefix_tokens].items():
+                if created_prefix:
+                    suffix, created_suffix = (prefix.suffixes.create(token=suffix_token, weight=weight), True)
+                else:
+                    suffix, created_suffix = prefix.suffixes.get_or_create(token=suffix_token, defaults={'weight': weight})
+                if not created_suffix:
+                    suffix.weight += weight
+                    updated_suffixes.append(suffix)
+        self.prefixes.bulk_update(updated_prefixes, ['occurrences'])
+        Suffix.objects.bulk_update(updated_suffixes, ['weight'])
+        print('')
+        self.trained_on.add(source)
+
 
     def random_sequence(self):
         prefix_tokens = deque([''] * (self.n-1), maxlen=self.n-1)
@@ -92,7 +118,7 @@ class Prefix(models.Model):
 class Suffix(models.Model):
     prefix = models.ForeignKey(Prefix, on_delete=models.CASCADE, related_name='suffixes')
     token = models.CharField(max_length=500)  # FIXME: Check that it's just one token
-    weight = models.PositiveIntegerField(default=1)
+    weight = models.PositiveIntegerField()
 
     class Meta:
         ordering = ['prefix', '-weight']

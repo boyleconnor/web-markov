@@ -24,9 +24,10 @@ class DeterministicMarkovTests(TestCase):
             mock_file = File(trump_file, name='trump.txt')
             trump_source = Source.objects.create(source_file=mock_file, name="Trump's Twitter")
             markov = Markov.objects.create(name="TrumpBot")
-            # markov.train_on(trump_source)  # FIXME: This is still way too slow.
-            # self.assertIn(trump_source, markov.trained_on.all())
-            # print(markov.random_text())
+            markov.train_on(trump_source)  # FIXME: This is still way too slow.
+            self.assertIn(trump_source, markov.trained_on.all())
+            print("Random Trump tweet:")
+            print(markov.random_text())
             trump_source.source_file.delete()
 
 
