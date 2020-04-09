@@ -26,7 +26,15 @@ class Markov:
         if len(ngram) != self.n:
             raise ValueError("ngram input must be of length: %d" % (self.n,))
 
-        source = ngram[:-1]
+        # FIXME: joining the source tokens (i.e. the prefix) together like this
+        # is a hack to make the internal graph JSON-compliant, and wasn't part
+        # of the original design. Really, the "Markov" model should never have
+        # had any concept of "n-gram", but instead should have simply focused
+        # on connecting prefixes to suffixes. Anyway, this *will* cause bugs
+        # if, for example, joining then re-tokenizing a set of tokens is not
+        # idempotent. Essentially, this is only gonna work for strings that
+        # have been tokenized by a non-information destructive regex search.
+        source = ''.join(ngram[:-1])
         destination = ngram[-1]
 
         # Cases:
@@ -60,12 +68,14 @@ class Markov:
         if len(prefix) != self.n - 1:
             raise ValueError("prefix must be of length: %d" % (self.n-1,))
 
-        if prefix not in self.graph:
+        prefix_string = ''.join(prefix)
+
+        if prefix_string not in self.graph:
             return {}
 
         mapping = {}
-        total_weight = sum(self.graph[prefix].values())
-        for suffix, weight in self.graph[prefix].items():
+        total_weight = sum(self.graph[prefix_string].values())
+        for suffix, weight in self.graph[prefix_string].items():
             mapping[suffix] = weight / total_weight
         return mapping
 
