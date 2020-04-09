@@ -2,8 +2,12 @@ import re
 from .markov import Markov
 
 
+WORD_NOT = '\w+|\W+'
+CHAR_BY_CHAR = '.'
+
+
 class TextMarkov(Markov):
-    def __init__(self, n):
+    def __init__(self, n, tokenizer=WORD_NOT):
         '''Initialize an n-gram based markov model specifically made for
         handling text(s).
 
@@ -12,6 +16,7 @@ class TextMarkov(Markov):
         '''
 
         super().__init__(n)
+        self.tokenizer = tokenizer
 
     def tokenize(self, text):
         '''Convert text into tokens, including n-1 empty strings at the start
@@ -23,7 +28,7 @@ class TextMarkov(Markov):
         '''
         prefix_length = self.n - 1
 
-        return [''] * prefix_length + re.findall(r'\w+|\W+', text) + ['']
+        return [''] * prefix_length + re.findall(self.tokenizer, text) + ['']
 
     def join(self, *tokens):
         '''Convert tokens into text, including n-1 empty strings at the start
