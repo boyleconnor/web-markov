@@ -17,45 +17,26 @@ router = Router()
 
 
 @router.register
-def add_model(server, name, n, tokenizer):
-    if name in server.models:
-        raise ValueError("There is already a model named: %s" % (name,))
-
-    server.config['models'][name] = {
-        'active': True,
-        'n': n,
-        'tokenizer': tokenizer,
-        'path': os.path.join(MODELS_PATH, name)
-    }
-
-    server.models[name] = TextMarkov(n, tokenizer)
-
-    server.save_graph(name)
-    server.save_config()
+def add_model(manager, name, n, tokenizer):
+    manager.add(name, n, tokenizer)
 
 
 @router.register
-def list_models(server):
-    return server.config['models']
+def list_models(manager):
+    return manager.list()
 
 
 @router.register
-def train_model(server, name, texts):
-    model = server.models[name]
-
-    for text in texts:
-        model.read_text(text)
-
-    server.save_graph(name)
+def delete_model(manager, name):
+    manager.delete(name)
 
 
 @router.register
-def random_sequence(server, name):
-    model = server.models[name]
-    return model.random_sequence()
+def train_model(manager, name, texts):
+    manager.train(name, texts)
 
 
 @router.register
-def random_text(server, name):
+def random_text(manager, name):
     model = server.models[name]
     return model.random_text()
