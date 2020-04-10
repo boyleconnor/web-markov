@@ -29,7 +29,7 @@ class Server:
 
     def save_config(self):
         with open(self.config_path, 'w') as config_file:
-            json.dump(self.config, config_file)
+            json.dump(self.config, config_file, indent=2, sort_keys=True)
 
     def save_graph(self, model_name):
         graph_path = self.config['models'][model_name]['path']
