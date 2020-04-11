@@ -38,5 +38,4 @@ def train_model(manager, name, texts):
 
 @router.register
 def random_text(manager, name):
-    model = server.models[name]
-    return model.random_text()
+    return manager.random_text(name)
