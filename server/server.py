@@ -2,14 +2,28 @@ import json
 import os
 import socket
 import sys
+import traceback
 from .views import router
 from .manager import Manager
 from models.text_markov import TextMarkov
 
 
 class Server:
-    def __init__(self, config_path, router):
+    '''A server that holds markov models in memory, and allows the client to
+    request actions to be performed on them (i.e. train them on new texts,
+    generate new random texts with them).
 
+    The server will bind a listening socket to the host name and port defined
+    by the 'host_name' and 'port' attributes of the config file. The client
+    communicates with the server on a one-socket-connection-per-request basis
+    (i.e. HTTP-style). The client should send their request as a JSON object
+    encoded in UTF-8, then send a shutdown(1) call, then receive data until the
+    server closes the connection on its end (i.e. until it receives a chunk of
+    0 bytes).
+
+    Repsonses are also given as UTF-8-encoded JSON objects.
+    '''
+    def __init__(self, config_path, router):
         # Load config file
         with open(config_path) as config_file:
             self.config = json.load(config_file)
@@ -20,6 +34,9 @@ class Server:
         # Attach views
         self.router = router
 
+        # Determine debug mode
+        self.debug = self.config['debug']
+
         # Set up network server
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         host_name, port = self.config['host_name'], self.config['port']
@@ -29,7 +46,7 @@ class Server:
     def get_request(self):
         '''Get the next request. This method returns a pair: (connection,
         request), where connection is a socket and request is the contents of
-        the request (parsed from JSON into into a Python object).
+        the request (parsed from JSON into a Python object).
         '''
         connection, address = self.sock.accept()
         print("Accepting connection from %s:%d" % address)
@@ -45,24 +62,31 @@ class Server:
 
             request_string += chunk.decode('utf-8')  # FIXME: Hard-coding as UTF-8: a good idea?
 
-        return connection, json.loads(request_string)
+        try:
+            request = json.loads(request_string)
+        except (UnicodeDecodeError, json.decoder.JSONDecodeError, Exception):
+            request = None
+        return connection, request
+
+    def send_response(self, connection, response):
+        response_string = json.dumps(response)
+        connection.sendall(response_string.encode('utf-8'))
+        connection.close()
 
     def run(self):
         while True:
             connection, request = self.get_request()
-            command = request['command']
-            args = request.get('args', {})
+            if request is None:
+                self.send_response(connection, {'status': 'error', 'result': 'bad request'})
+                continue
             try:
+                command = request['command']
+                args = request.get('args', {})
                 result = self.router.views[command](manager=self.manager, **args)
-                response = json.dumps({
-                    'status': 'success',
-                    'result': result
-                })
+                self.send_response(connection, {'status': 'success', 'result': result})
             except Exception as e:
-                raise e
-                response = json.dumps({
-                    'status': 'error',
-                    'result': str(e)
-                })
-            connection.sendall(response.encode('utf-8'))
-            connection.close()
+                if self.debug:
+                    result = traceback.format_exc()
+                else:
+                    result = 'server-side error'
+                self.send_response(connection, {'status': 'error', 'result': result})
