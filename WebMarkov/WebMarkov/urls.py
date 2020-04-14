@@ -15,23 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from MarkovApp.views import Home, UploadSource, SourceDetail, \
-                            SingleMarkovCreate, SingleMarkovDetail, \
-                            MergedMarkovCreate, MergedMarkovDetail, MergedMarkovSentence
-from MarkovApp.api import api_router
 
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('upload/', UploadSource.as_view(), name='upload_source'),
-    path('source/<pk>/', SourceDetail.as_view(), name='source_detail'),
-    path('singlemarkov/create/', SingleMarkovCreate.as_view(), name='singlemarkov_create'),
-    path('singlemarkov/<pk>/', SingleMarkovDetail.as_view(), name='singlemarkov_detail'),
-    path('mergedmarkov/create/', MergedMarkovCreate.as_view(), name='mergedmarkov_create'),
-    path('mergedmarkov/<pk>/', MergedMarkovDetail.as_view(), name='mergedmarkov_detail'),
-    path('mergedmarkov/<pk>/sentence/', MergedMarkovSentence.as_view(), name='mergedmarkov_sentence'),
-    path('', Home.as_view(), name='home'),
-    path('api/', include(api_router.urls)),
 ]
