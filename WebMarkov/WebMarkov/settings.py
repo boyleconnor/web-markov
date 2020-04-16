@@ -122,3 +122,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = 'uploads/'
+
+
+# MarkovMerge Server Info
+# Think of this as the "database" engine for the markov graphs
+
+MARKOV_MERGE_SERVER_ADDRESS = ('localhost', 1234)  # (host_name, port)
