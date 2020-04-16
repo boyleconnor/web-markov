@@ -77,7 +77,7 @@ class Server:
         while True:
             connection, request = self.get_request()
             if request is None:
-                self.send_response(connection, {'status': 'error', 'result': 'bad request'})
+                self.send_response(connection, {'status': 'error', 'message': 'bad request'})
                 continue
             try:
                 command = request['command']
@@ -86,7 +86,7 @@ class Server:
                 self.send_response(connection, {'status': 'success', 'result': result})
             except Exception as e:
                 if self.debug:
-                    result = traceback.format_exc()
+                    message = traceback.format_exc()
                 else:
-                    result = 'server-side error'
-                self.send_response(connection, {'status': 'error', 'result': result})
+                    message = 'server-side error'
+                self.send_response(connection, {'status': 'error', 'message': message})
