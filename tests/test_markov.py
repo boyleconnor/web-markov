@@ -129,24 +129,27 @@ class ProbabilisticTests(TestCase):  # TODO: Test Markov.random_suffix method
     def test_random_sequence(self):
         ITERATIONS = 40000
 
-        message_one = ['hello', 'my', 'name', 'is', 'Michael']
-        message_two = ['hello', 'my', 'name', 'is', 'David']
+        message_one = ['', 'hello', 'my', 'name', 'is', 'Michael', '']
+        message_two = ['', 'hello', 'my', 'name', 'is', 'David', '']
 
         markov = Markov(2)
+        markov.add_ngram('', 'hello')
         markov.add_ngram('hello', 'my')
         markov.add_ngram('my', 'name')
         markov.add_ngram('name', 'is')
         markov.add_ngram('is', 'Michael')
+        markov.add_ngram('Michael', '')
 
-        random_message = markov.random_sequence('hello')
+        random_message = markov.random_sequence('')
         self.assertEqual(random_message, message_one)
 
         markov.add_ngram('is', 'David')
+        markov.add_ngram('David', '')
 
         one_count = 0
         two_count = 0
         for i in range(ITERATIONS):
-            random_message = markov.random_sequence('hello')
+            random_message = markov.random_sequence('')
             if random_message == message_one:
                 one_count += 1
             elif random_message == message_two:

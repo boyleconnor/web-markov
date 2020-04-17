@@ -68,7 +68,10 @@ class Markov:
         if len(prefix) != self.n - 1:
             raise ValueError("prefix must be of length: %d" % (self.n-1,))
 
-        prefix_string = ''.join(prefix)
+        try:
+            prefix_string = ''.join(prefix)
+        except TypeError:
+            raise TypeError('prefix is: %s' % (str(prefix),))
 
         if prefix_string not in self.graph:
             return {}
@@ -130,10 +133,9 @@ class Markov:
         sequence = list(prefix_queue)
 
         while True:
-            if self.get_suffixes(*prefix_queue) == {}:
+            suffix = self.random_suffix(*prefix_queue)
+            sequence.append(suffix)
+            if suffix == '':
                 return sequence
-            else:
-                suffix = self.random_suffix(*prefix_queue)
-                sequence.append(suffix)
-                prefix_queue.append(suffix)
+            prefix_queue.append(suffix)
 
