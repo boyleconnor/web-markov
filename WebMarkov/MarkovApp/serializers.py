@@ -9,8 +9,7 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MarkovSerializer(serializers.HyperlinkedModelSerializer):
-    # trained_on = SourceSerializer(read_only=True)
-
     class Meta:
         model = Markov
-        fields = ['url', 'id', 'name', 'n', 'tokenizer', 'trained_on']
+        fields = ['url', 'id', 'name', 'n', 'tokenizer']
+        read_only_fields = ['trained_on']
