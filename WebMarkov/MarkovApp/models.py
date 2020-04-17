@@ -7,8 +7,6 @@ from django.conf import settings
 from .client import Client
 
 
-DEFAULT_N = 5
-
 
 # Connect to the MarkovMerge server
 host_name, port = settings.MARKOV_MERGE_SERVER_ADDRESS
@@ -24,9 +22,15 @@ class Source(models.Model):
 
 
 class Markov(models.Model):
+    WORD_NOT = '\w+|\W+'
+    CHAR_BY_CHAR = '.'
+    TOKENIZER_CHOICES = [
+        (WORD_NOT, 'Word-Not'),
+        (CHAR_BY_CHAR, 'Characters')
+    ]
     name = models.CharField(max_length=100, blank=False, unique=True)
-    tokenizer = models.CharField(max_length=300, default='\w+|\W+')
-    n = models.PositiveSmallIntegerField(default=DEFAULT_N)
+    tokenizer = models.CharField(max_length=300, choices=TOKENIZER_CHOICES, default=WORD_NOT)
+    n = models.PositiveSmallIntegerField(default=5)
     trained_on = models.ManyToManyField(Source, blank=True)
     saved_to_markov_merge = models.BooleanField(default=False)
 
