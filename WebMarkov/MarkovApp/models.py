@@ -16,6 +16,10 @@ client = Client(host_name, port)
 class Source(models.Model):
     name = models.CharField(max_length=100, blank=False, unique=True)
     source_file = models.FileField(upload_to='sources/')
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.name
@@ -32,6 +36,10 @@ class Markov(models.Model):
     tokenizer = models.CharField(max_length=300, choices=TOKENIZER_CHOICES, default=WORD_NOT)
     n = models.PositiveSmallIntegerField(default=5)
     trained_on = models.ManyToManyField(Source, blank=True)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     saved_to_markov_merge = models.BooleanField(default=False)
 
     def train_on(self, source):
