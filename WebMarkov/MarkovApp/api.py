@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from MarkovApp.models import Source, Markov
 from MarkovApp.permissions import ReadOnly, OwnerCanEdit, UserCanCreate
-from MarkovApp.serializers import SourceSerializer, MarkovSerializer, UserSerializer
+from MarkovApp.serializers import SourceSerializer, MarkovSerializer, UserSerializer, RandomTextSerializer
 
 
 User = get_user_model()
@@ -30,7 +30,6 @@ class SourceViewSet(ModelViewSet):
 class MarkovViewSet(ModelViewSet):
     permission_classes = [OwnerCanEdit | ReadOnly | UserCanCreate]
     queryset = Markov.objects.all()
-    serializer_class = MarkovSerializer
 
     # Assign owner to markov
     def perform_create(self, serializer):
@@ -38,14 +37,20 @@ class MarkovViewSet(ModelViewSet):
 
     @action(detail=True)
     def random_text(self, request, pk=None):
-        return Response({
-            'text': self.get_object().random_text()
-        })
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
     def train_on(self, request, pk=None):
         source = Source.objects.get(id=request.data['source'])
         self.get_object().train_on(source)
+
+    def get_serializer_class(self):
+        if self.action == 'random_text':
+            return RandomTextSerializer
+        else:
+            return MarkovSerializer
 
 
 api_router = DefaultRouter()

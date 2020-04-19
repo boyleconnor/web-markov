@@ -31,8 +31,15 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
 
 class MarkovSerializer(serializers.HyperlinkedModelSerializer):
     owner = BasicUserSerializer(read_only=True)
+    random_text_url = serializers.HyperlinkedIdentityField(view_name='markov-random-text')
 
     class Meta:
         model = Markov
-        fields = ['url', 'id', 'name', 'n', 'tokenizer', 'trained_on', 'owner']
+        fields = ['url', 'id', 'name', 'n', 'tokenizer', 'trained_on', 'owner', 'random_text_url']
         read_only_fields = ['trained_on', 'owner']
+
+
+class RandomTextSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Markov
+        fields = ['url', 'id', 'random_text']
