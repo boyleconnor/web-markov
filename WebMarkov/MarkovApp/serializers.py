@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from MarkovApp.models import Source, Markov
+from MarkovApp.models import Source, Markov, Training
 
 
 User = get_user_model()
@@ -29,9 +29,26 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ['owner']
 
 
+class BasicSourceSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Source
+        fields = ['url', 'id', 'name']
+
+
+class MarkovTrainingSerializer(serializers.HyperlinkedModelSerializer):
+    '''Serializes a training for a given (known) markov model.
+    '''
+    source = BasicSourceSerializer(read_only=True)
+
+    class Meta:
+        model = Training
+        fields = ['url', 'source']
+
+
 class MarkovSerializer(serializers.HyperlinkedModelSerializer):
     owner = BasicUserSerializer(read_only=True)
     random_text_url = serializers.HyperlinkedIdentityField(view_name='markov-random-text')
+    trained_on = MarkovTrainingSerializer(read_only=True, many=True)
 
     class Meta:
         model = Markov
@@ -43,3 +60,9 @@ class RandomTextSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Markov
         fields = ['url', 'id', 'random_text']
+
+
+class TrainingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Training
+        fields = ['id', 'markov', 'source']

@@ -3,9 +3,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from MarkovApp.models import Source, Markov
-from MarkovApp.permissions import ReadOnly, OwnerCanEdit, UserCanCreate
-from MarkovApp.serializers import SourceSerializer, MarkovSerializer, UserSerializer, RandomTextSerializer
+from MarkovApp.models import Source, Markov, Training
+from MarkovApp.permissions import ReadOnly, OwnerCanDelete, UserCanCreate, MarkovOwnerCanTrain
+from MarkovApp.serializers import SourceSerializer, MarkovSerializer, UserSerializer, RandomTextSerializer, TrainingSerializer
 
 
 User = get_user_model()
@@ -18,7 +18,7 @@ class UserViewSet(ModelViewSet):
 
 
 class SourceViewSet(ModelViewSet):
-    permission_classes = [OwnerCanEdit | ReadOnly | UserCanCreate]
+    permission_classes = [OwnerCanDelete | ReadOnly | UserCanCreate]
     queryset = Source.objects.all()
     serializer_class = SourceSerializer
 
@@ -28,7 +28,7 @@ class SourceViewSet(ModelViewSet):
 
 
 class MarkovViewSet(ModelViewSet):
-    permission_classes = [OwnerCanEdit | ReadOnly | UserCanCreate]
+    permission_classes = [OwnerCanDelete | ReadOnly | UserCanCreate]
     queryset = Markov.objects.all()
 
     # Assign owner to markov
@@ -41,11 +41,6 @@ class MarkovViewSet(ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['post'])
-    def train_on(self, request, pk=None):
-        source = Source.objects.get(id=request.data['source'])
-        self.get_object().train_on(source)
-
     def get_serializer_class(self):
         if self.action == 'random_text':
             return RandomTextSerializer
@@ -53,7 +48,14 @@ class MarkovViewSet(ModelViewSet):
             return MarkovSerializer
 
 
+class TrainingViewSet(ModelViewSet):
+    permission_classes = [MarkovOwnerCanTrain]
+    queryset = Training.objects.all()
+    serializer_class = TrainingSerializer
+
+
 api_router = DefaultRouter()
 api_router.register('user', UserViewSet)
 api_router.register('source', SourceViewSet)
 api_router.register('markov', MarkovViewSet)
+api_router.register('training', TrainingViewSet)

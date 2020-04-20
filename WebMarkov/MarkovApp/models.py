@@ -35,18 +35,11 @@ class Markov(models.Model):
     name = models.CharField(max_length=100, blank=False, unique=True)
     tokenizer = models.CharField(max_length=300, choices=TOKENIZER_CHOICES, default=WORD_NOT)
     n = models.PositiveSmallIntegerField(default=5)
-    trained_on = models.ManyToManyField(Source, blank=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
     saved_to_markov_merge = models.BooleanField(default=False)
-
-    def train_on(self, source):
-        if self.trained_on.filter(pk=source.pk).exists():
-            raise ValueError("Model has already been trained on source: %s" % (source,))
-        client.train_model(str(self.pk), [line.decode() for line in source.source_file.readlines()])
-        self.trained_on.add(source)
 
     def random_text(self):
         return client.random_text(str(self.pk))['result']
@@ -59,6 +52,24 @@ class Markov(models.Model):
         result = super().save(*args, **kwargs)
         if not self.saved_to_markov_merge:
             client.add_model(str(self.pk), self.n, self.tokenizer)
+            self.saved_to_markov_merge = True
+            result = super().save()
+        return result
+
+
+class Training(models.Model):
+    markov = models.ForeignKey(Markov, on_delete=models.CASCADE, related_name='trained_on')
+    source = models.ForeignKey(Source, on_delete=models.CASCADE)
+    saved_to_markov_merge = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ['markov', 'source']
+
+    def save(self, *args, **kwargs):
+        # Train model on MarkovMerge server
+        result = super().save(*args, **kwargs)
+        if not self.saved_to_markov_merge:
+            client.train_model(str(self.markov.pk), [line.decode() for line in self.source.source_file.readlines()])
             self.saved_to_markov_merge = True
             result = super().save()
         return result
