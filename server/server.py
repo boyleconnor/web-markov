@@ -85,8 +85,10 @@ class Server:
                 result = self.router.views[command](manager=self.manager, **args)
                 self.send_response(connection, {'status': 'success', 'result': result})
             except Exception as e:
+                exception_message = traceback.format_exc()
+                print(exception_message)
                 if self.debug:
-                    message = traceback.format_exc()
+                    message = exception_message
                 else:
                     message = 'server-side error'
                 self.send_response(connection, {'status': 'error', 'message': message})
