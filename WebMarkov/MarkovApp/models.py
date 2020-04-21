@@ -56,6 +56,10 @@ class Markov(models.Model):
             result = super().save()
         return result
 
+    def delete(self, *args, **kwargs):
+        client.delete_model(str(self.pk))
+        super().delete(*args, **kwargs)
+
 
 class Training(models.Model):
     markov = models.ForeignKey(Markov, on_delete=models.CASCADE, related_name='trained_on')
