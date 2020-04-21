@@ -43,11 +43,12 @@ class MarkovOwnerCanTrain(BasePermission):
                 return markov.owner == request.user
             return True  # Invalid serializer can't be saved, so we're safe!
 
-        # FIXME: GET is in here solely for testing purposes
-        elif request.method in ('DELETE', 'GET'):  
+        # FIXME: Allow models to be untrained (i.e. with DELETE method)
+        elif request.method == 'GET':  
             return True
 
         return False
 
     def has_object_permission(self, request, view, object):
-        return request.user == object.markov.owner
+        # FIXME: In the future, "trainings" should be deletable
+        return False
