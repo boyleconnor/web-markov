@@ -3,3 +3,4 @@ __pycache__/
 venv/
 db.sqlite3
 WebMarkov/uploads/
+WebMarkov/frontend/node_modules/
