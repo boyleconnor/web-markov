@@ -1,0 +1,25 @@
+html * {
+  font-family: Arial;
+}
+ul.nav-bar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: #f1f1f1;
+  overflow: hidden;
+}
+li.nav-list {
+  float: left;
+}
+li.nav-list a.nav-link {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+  text-align: center;
+}
+li.nav-list a.nav-link:hover {
+  background-color: #555;
+  color: white;
+}

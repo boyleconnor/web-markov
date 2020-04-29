@@ -124,6 +124,8 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = 'uploads/'
 
+LOGIN_REDIRECT_URL = 'index'
+
 
 # MarkovMerge Server Info
 # Think of this as the "database" engine for the markov graphs

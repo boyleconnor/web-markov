@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MarkovMerge</title>
-</head>
-<body>
-{% csrf_token %}
+{% extends "frontend/base.html" %}
+{% load static %}
+{% block content %}
 <div id="app">
   <!-- React App will load here -->
 </div>
-</body>
-{% load static %}
-<script src="{% static "frontend/main.js" %}"></script>
-</html>
+{% endblock %}
+{% block tail %}<script src="{% static "frontend/main.js" %}"></script>{% endblock %}

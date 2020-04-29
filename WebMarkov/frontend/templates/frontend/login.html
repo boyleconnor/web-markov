@@ -1,0 +1,14 @@
+{% extends "frontend/base.html" %}
+{% block head %}{% endblock %}
+{% block content %}
+<form class="loginform" method="post">
+  <h2>Login</h2>
+  {% csrf_token %}
+  <table align=center style="padding: 15% 0;">
+    {{ form.as_table }}
+    <tr>
+      <td align=center colspan=2><button type="submit">Login</button></td>
+    </tr>
+  </table>
+</form>
+{% endblock %}
