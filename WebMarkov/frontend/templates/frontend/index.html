@@ -1,8 +1,18 @@
 {% extends "frontend/base.html" %}
 {% load static %}
+
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static "frontend/index.css" %}">
+{% endblock %}
+
 {% block content %}
-<div id="app">
-  <!-- React App will load here -->
+<div class="center">
+  <h1>MarkovMerge</h1>
+  <p><b>MarkovMerge</b> is a tool that allows users to train text-generation bots various sources of text.  </p>
+  <div id="app">
+    <!-- React App will load here -->
+  </div>
 </div>
 {% endblock %}
+
 {% block tail %}<script src="{% static "frontend/main.js" %}"></script>{% endblock %}

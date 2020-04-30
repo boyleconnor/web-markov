@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import SourceList from './SourceList.js';
+import MarkovList from './MarkovList.js';
 import Cookies from 'js-cookie'
 
 
@@ -31,9 +32,13 @@ class App extends React.Component {
   }
   
   render() {
-    const source_url = this.state.source_url;
-    if (source_url) {
-      return <SourceList url={this.state.source_url} csrf={this.state.csrftoken} />;
+    const markov_url = this.state.markov_url;
+    if (markov_url) {
+      return (
+        <div id="app-interior">
+          <MarkovList url={markov_url} />
+        </div>
+      );
     } else {
       return <p>Loading...</p>
     }
