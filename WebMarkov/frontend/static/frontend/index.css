@@ -2,7 +2,7 @@ div.center {
   margin-left: 20%;
   margin-right: 20%;
 }
-div.random-text {
+.random-text {
   font-family: "Lucida Console", Monaco, monospace;
   color: white;
   background-color: black;
@@ -10,6 +10,14 @@ div.random-text {
   padding: 8px;
   height: 150px;
   overflow: auto;
+}
+.random-text-refresh {
+  font-family: "Lucida Console", Monaco, monospace;
+  color: red;
+}
+.random-text-refresh:hover {
+  background-color: red;
+  color: black;
 }
 ul.training-list {
   list-style-type: none;

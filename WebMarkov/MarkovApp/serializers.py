@@ -52,7 +52,7 @@ class MarkovSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Markov
-        fields = ['url', 'id', 'name', 'n', 'tokenizer', 'trained_on', 'owner', 'random_text_url']
+        fields = ['url', 'id', 'name', 'n', 'tokenizer', 'trained_on', 'owner', 'random_text_url', 'get_tokenizer_display']
         read_only_fields = ['trained_on', 'owner']
 
 

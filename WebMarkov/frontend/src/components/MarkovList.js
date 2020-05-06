@@ -26,7 +26,12 @@ class MarkovDetail extends React.Component {
     return (
       <div className="markov-detail">
         <h3>{markov.name}</h3>
-        <p><b>{markov.name}</b> has been trained on the following sources:</p>
+        <p>
+          <b>{markov.name}</b> tokenizes texts using the&nbsp;
+          <b>{markov.get_tokenizer_display.toLowerCase()}</b> tokenizer, and processes
+          those tokens in n-grams of size <b>{markov.n}</b>. It has been trained on
+          the following sources:
+        </p>
 
         <ul className="training-list">
           {markov.trained_on.map((training) => <li className="trained-source" key={training.source.id}> {training.source.name} </li>)}
@@ -35,10 +40,8 @@ class MarkovDetail extends React.Component {
         <p>and generated the following text:</p>
 
         <div className="random-text">
-          {this.state.random_text}
+          [{markov.name}]: {this.state.random_text} <br /> <span onClick={() => {this.getRandomText();}} className="random-text-refresh">[click here to re-generate text]</span>
         </div>
-
-        <button onClick={() => {this.getRandomText();}}>refresh text</button>
       </div>
     );
   }
