@@ -3,9 +3,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from MarkovApp.models import Source, Markov, Training
-from MarkovApp.permissions import ReadOnly, OwnerCanDelete, UserCanCreate, MarkovOwnerCanTrain
-from MarkovApp.serializers import SourceSerializer, MarkovSerializer, UserSerializer, RandomTextSerializer, TrainingSerializer
+from .models import Source, Markov, Training
+from .permissions import ReadOnly, OwnerCanDelete, UserCanCreate, MarkovOwnerCanTrain
+from .serializers import SourceSerializer, MarkovSerializer, UserSerializer, RandomTextSerializer, TrainingSerializer
 
 
 User = get_user_model()

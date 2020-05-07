@@ -1,6 +1,6 @@
 from django.test import TestCase
-from MarkovApp.models import Source, Markov
 from django.core.files import File
+from .models import Source, Markov
 
 
 class DeterministicMarkovTests(TestCase):

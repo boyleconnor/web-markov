@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from MarkovApp.models import Source, Markov, Training
+from .models import Source, Markov, Training
 
 
 User = get_user_model()
