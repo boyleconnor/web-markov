@@ -25,7 +25,7 @@ class SourceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Source
-        fields = ['url', 'id', 'name', 'source_file', 'owner']
+        fields = ['url', 'id', 'name', 'file', 'owner']
         read_only_fields = ['owner']
 
 
@@ -42,7 +42,7 @@ class MarkovTrainingSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Training
-        fields = ['url', 'source']
+        fields = ['url', 'source', 'weight']
 
 
 class MarkovSerializer(serializers.HyperlinkedModelSerializer):
@@ -65,4 +65,4 @@ class RandomTextSerializer(serializers.HyperlinkedModelSerializer):
 class TrainingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Training
-        fields = ['id', 'markov', 'source']
+        fields = ['id', 'markov', 'source', 'weight']
