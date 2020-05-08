@@ -49,7 +49,7 @@ class Markov(models.Model):
     def _tokenize(self, text):
         return re.findall(self.tokenizer, text)
 
-    def read_text(self, text, weight=1):
+    def read_text(self, text, weight=1, save=False):
         '''Read a text as a series of ngrams. This method treats the beginning
         of a text as (n-1) blank tokens (i.e. [""] * n-1) and the end of text
         as a single blank token. Texts can be any number of tokens in length
@@ -68,6 +68,21 @@ class Markov(models.Model):
             prefix = ''.join(tokens[i:i+prefix_length])
             suffix = tokens[i+prefix_length]
             self._add_ngram(prefix, suffix, weight)
+
+        if save:
+            self.save()
+
+    def read_source(self, source, save=True):
+        '''Go through and iterable of texts (i.e. a source), and train the
+        model on each text.
+        '''
+        source.file.close()
+        source.file.open(mode='r')
+        for line in source.file:
+            self.read_text(line)
+
+        if save:
+            self.save()
 
     def get_suffixes(self, prefix):
         '''For a given prefix, get a mapping of suffixes to probabilities (i.e.
@@ -95,6 +110,9 @@ class Markov(models.Model):
         model starting at recorded beginnings of texts (i.e. the prefix [''] *
         n-1) and ending at the recorded endings of texts (i.e. the suffix '').
         '''
+        if self.graph == {}:
+            raise ValueError("This markov has not been trained")
+
         prefix_length = self.n - 1
         sequence = [''] * (prefix_length)
         prefix = deque(sequence, maxlen=prefix_length)
@@ -128,14 +146,8 @@ class Training(models.Model):
     class Meta:
         unique_together = ['markov', 'source']
 
-    def _train_model(self):
-        self.source.file.close()
-        self.source.file.open(mode='r')
-        for line in self.source.file:
-            self.markov.read_text(line)
-
     def save(self, *args, **kwargs):
-        # Actually train the model
+        # Actually train the model the first time this is saved to DB
         if self.pk is None:
-            self._train_model()
+            self.markov.read_source(self.source, save=True)
         return super().save(*args, **kwargs)
