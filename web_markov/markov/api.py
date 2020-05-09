@@ -29,7 +29,11 @@ class SourceViewSet(ModelViewSet):
 
 class MarkovViewSet(ModelViewSet):
     permission_classes = [OwnerCanDelete | ReadOnly | UserCanCreate]
-    queryset = Markov.objects.all()
+
+    # FIXME: This prevents the markov's graph from being loaded from DB. This
+    # might not be the best way to do it. See the "note" in:
+    # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#defer
+    queryset = Markov.objects.defer('graph').all()
 
     # Assign owner to markov
     def perform_create(self, serializer):
