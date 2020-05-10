@@ -2,5 +2,5 @@ __pycache__/
 *.py[cod]
 venv/
 db.sqlite3
-WebMarkov/uploads/
-WebMarkov/frontend/node_modules/
+uploads/
+frontend/node_modules/
