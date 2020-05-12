@@ -1,8 +1,11 @@
 import React from "react";
 import { render } from "react-dom";
+import {NavLink, Route, Switch, BrowserRouter} from "react-router-dom";
 import SourceList from './SourceList.js';
 import MarkovList from './MarkovList.js';
-import Cookies from 'js-cookie'
+import MarkovDetail from './MarkovDetail.js';
+import About from './About.js';
+import Cookies from 'js-cookie';
 
 
 class App extends React.Component {
@@ -30,18 +33,35 @@ class App extends React.Component {
   componentDidMount() {
     this.fetchUrls();
   }
-  
+
   render() {
-    const markov_url = this.state.markov_url;
-    if (markov_url) {
-      return (
-        <div id="app-interior">
-          <MarkovList url={markov_url} />
+    return (
+      <BrowserRouter>
+        <div id="nav-bar">
+          <ul class="nav-bar">
+            <li class="nav-list"><NavLink to="/" className="nav-link">Home</NavLink></li>
+            <li class="nav-list"><NavLink to="/about/" className="nav-link">About</NavLink></li>
+          </ul>
         </div>
-      );
-    } else {
-      return <p>Loading...</p>
-    }
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={(props) => <MarkovList url={this.state.markov_url} /> }
+        />
+        <Route
+          exact
+          path="/about/"
+          component={About}
+        />
+        <Route
+          exact
+          path="/markov/:markovId"
+          render={MarkovDetail}
+        />
+      </Switch>
+      </BrowserRouter>
+    );
   }
 }
 

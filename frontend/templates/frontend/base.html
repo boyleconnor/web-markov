@@ -9,17 +9,6 @@
   {% block head %}{% endblock %}
 </head>
 <body>
-<div id="nav-bar">
-  <ul class="nav-bar">
-    <li class="nav-list"><a href="/" class="nav-link">Home</a></li>
-    <li class="nav-list"><a href="/" class="nav-link">About</a></li>
-    {% if user.is_authenticated %}
-    <li class="nav-list"><a href="{% url "logout" %}" class="nav-link">Logout</a></li>
-    {% else %}
-    <li class="nav-list"><a href="{% url "login" %}" class="nav-link">Login</a></li>
-    {% endif %}
-  </ul>
-</div>
 {% block content %}
 {% endblock %}
 </body>

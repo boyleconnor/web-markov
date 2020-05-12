@@ -1,7 +1,7 @@
 import React from "react";
 
 
-class MarkovDetail extends React.Component {
+class MiniMarkovDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,14 +65,22 @@ class MarkovList extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchMarkovs();
+    if (this.props.url) {
+      this.fetchMarkovs();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.url != prevProps.url) {
+      this.fetchMarkovs();
+    }
   }
 
   render() {
     const markovs = this.state.markovs;
     let markov_list;
     if (markovs) {
-      markov_list = markovs.map((markov) => <MarkovDetail key={markov.id} markov={markov} />);
+      markov_list = markovs.map((markov) => <MiniMarkovDetail key={markov.id} markov={markov} />);
     } else {
       markov_list = <p>No markovs found</p>;
     }
